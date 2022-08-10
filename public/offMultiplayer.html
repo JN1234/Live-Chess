@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Live Chess</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="./bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./styles/admin.css" rel="stylesheet">
+	<link href="./jquery-ui-1.13.1.custom/jquery-ui.min.css" rel="stylesheet">
+    <script src="./jquery-ui-1.13.1.custom/external/jquery/jquery.js"></script>
+    <script src="./jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
+    <script src="./js/javascript.js"></script>
+    <!-- choose one -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="./p5/p5.js"></script>
+    <!-- <script src="../addons/p5.sound.js"></script> -->
+    <script  src="./js/sketchoffmultiplayer.js"></script>
+    <style>
+    body {
+      padding: 0;
+      margin: 0;
+        text-align: center;
+    background-color: rgba(238, 135, 51, 0.171)
+    }
+    
+    button {
+        padding: 5px 5px;
+        border: 0px;
+        border-radius: 10px;
+        margin: 0px 10px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    background-color: rgba(238, 135, 51, 0.171);
+    font-size: 15px;
+    font-weight: bold;
+    }
+    button:hover{
+        
+    box-shadow: 0 4px 8px 0 rgba(255,255,255,0.2);
+    background-color: #000b1b;
+    color: wheat;
+    }
+    
+     .menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin:10px 0;
+    }
+        
+
+  </style>
+  <script>
+
+  </script>
+</head>
+
+<body>
+
+
+    <div class="container">
+            <div class="menu">
+                    
+                <div class="menu-options">
+                        <button type="button"  onclick="restartGame()">
+                           
+                                    Restart
+                                    <i data-feather="refresh-cw"></i>
+                        </button>
+                        <button type="button"  onclick="requestDraw()">
+                            Draw
+                            <i data-feather="circle"></i>
+                        </button>
+                        <button type="button"  id="create-user" onclick="quitGame()">
+                            
+                                Quit
+                                <i data-feather="x-square"></i>
+                          
+                        </button>
+                    
+               
+                </div>
+        </div>
+    </div>
+        <!-- modals  -->
+        
+        <!-- request draw modals  -->
+        <div id="dialog-confirm-draw" style ="display: none;" title="Accept Request">
+            <p id="draw-req-message"><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;" >
+            </span ></p>
+            
+          </div>
+          <!-- game over modals  -->
+        <div id="dialog-game-over" style ="display: none;" title="Game Over">
+            <p id="game-over-message"><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;" >
+            </span >
+        </p>
+        <button type="button"  onclick="resetGame()">
+                           
+            Restart
+            <i data-feather="refresh-cw"></i>
+        </button>
+          </div>
+          
+          <!-- game quit modals  -->
+        <div id="dialog-game-quit" style ="display: none;" title="Quit">
+            <p id="game-quit-message"><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;" >
+            </span ></p>
+          </div>
+          
+          <!-- game over modals  -->
+        <div id="dialog-game-restart" style ="display: none;" title="Game Restart">
+            <p id="game-restart-message"><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;" >
+            </span ></p>
+            
+          </div>
+      
+          <div id="dialog-swap-piece" style ="display: none;" title="Swap Out With">
+            <p id="swap-piece-message"><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;" >
+            </span ></p>
+            
+            <p onclick="swap(this.innerText)">
+                Queen
+            </p>
+            <p onclick="swap(this.innerText)">
+                Bishop
+            </p>
+            <p onclick="swap(this.innerText)">
+                Knight
+            </p>
+            <p onclick="swap(this.innerText)">
+                Rook
+            </p>
+          </div>
+      
+    
+          <script>
+            feather.replace()
+            function resetGame (){ window.location.reload()}
+            function swap(name){
+                    console.log("NAEEEEEEEEEEEEEEEEEE",name)
+                    swapOutPiece(name)
+            }
+          </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="./bootstrap-4.3.1-dist/js/bootstrap.min.js"
+        ></script>
+</body>
+
+</html>
