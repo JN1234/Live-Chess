@@ -15,6 +15,7 @@
     "cryptr": "^6.0.2",
     "express": "^4.17.1",
     "handsfree": "^8.5.1",
+    "humidityserver": "file:",
     "joi": "^17.4.0",
     "knex": "^0.95.11",
     "mysql": "^2.18.1",

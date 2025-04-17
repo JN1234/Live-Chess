@@ -34,60 +34,7 @@ pool.on("connection", (conn) => {
   });
 });
 
-app.post("/data/:temp/:time", async (req, res) => {
-  //add to db
-  let data = {
-    temperature: req.params.temp,
-    time: req.params.time,
 
-    date: new Date().toISOString().split("T")[0],
-  };
-  let sql = "INSERT INTO data SET ?";
-  let signupQuery = db.query(sql, data, (err, result) => {
-    try {
-      if (err) throw err;
-      else {
-        res.json({ result });
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error });
-    }
-  });
-});
-app.get("/data", async (req, res) => {
-  //get db data
-  let sql = `SELECT * FROM data`;
-
-  let getQuery = db.query(sql, (err, result) => {
-    if (err) throw err;
-    else {
-      res.json({ data: result });
-    }
-  });
-});
-
-app.get("/data/report/:date", async (req, res) => {
-  //get db data
-  let sql = `SELECT * FROM data WHERE date = '${req.params.date}' ORDER BY temperature DESC LIMIT 1`;
-
-  let sql2 = `SELECT * FROM data  WHERE date = '${req.params.date}' ORDER BY temperature ASC LIMIT 1`;
-  var report = {};
-  let getQuery = db.query(sql, (err, result) => {
-    if (err) throw err;
-    else {
-      report.highest = result[0];
-
-      let getQuery = db.query(sql2, (err, result) => {
-        if (err) throw err;
-        else {
-          report.lowest = result[0];
-          res.json({ data: report });
-        }
-      });
-    }
-  });
-});
 app.listen(port, () => {
   console.log("Listening on port " + port);
 });

@@ -9,48 +9,45 @@ let white = 8;
 let black = 16;
 let selectedPiece = null;
 let prevSelectedPiece = null;
-let pieceToSwap=null
+let pieceToSwap = null;
 let selectedBox;
 let prevSelectedBox;
 let possibleMoves = [];
-let making_opp_move=false
+let making_opp_move = false;
 let checkingCastling = false;
-let gettingKingCheckedStatus=false
+let gettingKingCheckedStatus = false;
 let checkingOpenCheck = false;
 let checkCastlingRights = true;
-let trimingKingMoves= false
-let moving = false
-let dialogOpen=false
-let nameEachSquare=false
+let trimingKingMoves = false;
+let moving = false;
+let dialogOpen = false;
+let nameEachSquare = false;
 let allPossibleMovesBlack = [];
 let allPossibleMovesToConsiderForCastling = [];
-let piecesDefended=[]
+let piecesDefended = [];
 let allPossibleMovesToConsiderForChecking = [];
 let allPossibleMovesWhite = [];
-let forbiddenWhiteKingMoves=[]
-let forbiddenBlackKingMoves=[]
-let movesForWhiteOpenCheckPiece=[]
+let forbiddenWhiteKingMoves = [];
+let forbiddenBlackKingMoves = [];
+let movesForWhiteOpenCheckPiece = [];
 
-let pieces_checking_white_king=[]
-let pieces_checking_black_king=[]
+let pieces_checking_white_king = [];
+let pieces_checking_black_king = [];
 
-let threefold_repetition=["","","","","","","","","",""]
+let threefold_repetition = ["", "", "", "", "", "", "", "", "", ""];
 
-let pieces_around_white_king=[]
-let pieces_around_black_king=[]
+let pieces_around_white_king = [];
+let pieces_around_black_king = [];
 
+let opponent_pieces_around_white_king = [];
+let opponent_pieces_around_black_king = [];
 
-let opponent_pieces_around_white_king=[]
-let opponent_pieces_around_black_king=[]
+let pieces_protecting_white_king = [];
+let pieces_protecting_black_king = [];
 
+let allMovesForWhiteOpenCheck = [];
 
-let pieces_protecting_white_king=[]
-let pieces_protecting_black_king=[]
-
-let allMovesForWhiteOpenCheck=[]
-
-let allMovesForBlackOpenCheck=[]
-
+let allMovesForBlackOpenCheck = [];
 
 let allPossibleMovesBlackWhenChecked = [];
 let allPossibleMovesWhiteWhenChecked = [];
@@ -106,135 +103,128 @@ let halfMoveClock = 0;
 let fullMoveNumber = 0;
 let possibleEnPassantTarget = "-";
 
-let gameState=null
+let gameState = null;
 
-function resetGame(){
-   none = 0;
- king = 1;
- pawn = 2;
- knight = 3;
- bishop = 4;
- rook = 5;
- queen = 6;
- white = 8;
- black = 16;
- selectedPiece = null;
- prevSelectedPiece = null;
- pieceToSwap=null
- selectedBox;
- prevSelectedBox;
- possibleMoves = [];
- checkingCastling = false;
- gettingKingCheckedStatus=false
- checkingOpenCheck = false;
- checkCastlingRights = true;
- trimingKingMoves= false
- moving = false
- dialogOpen=false
- nameEachSquare=false
- allPossibleMovesBlack = [];
- allPossibleMovesToConsiderForCastling = [];
- piecesDefended=[]
- allPossibleMovesToConsiderForChecking = [];
- allPossibleMovesWhite = [];
- forbiddenWhiteKingMoves=[]
- forbiddenBlackKingMoves=[]
- movesForWhiteOpenCheckPiece=[]
+function resetGame() {
+  none = 0;
+  king = 1;
+  pawn = 2;
+  knight = 3;
+  bishop = 4;
+  rook = 5;
+  queen = 6;
+  white = 8;
+  black = 16;
+  selectedPiece = null;
+  prevSelectedPiece = null;
+  pieceToSwap = null;
+  selectedBox;
+  prevSelectedBox;
+  possibleMoves = [];
+  checkingCastling = false;
+  gettingKingCheckedStatus = false;
+  checkingOpenCheck = false;
+  checkCastlingRights = true;
+  trimingKingMoves = false;
+  moving = false;
+  dialogOpen = false;
+  nameEachSquare = false;
+  allPossibleMovesBlack = [];
+  allPossibleMovesToConsiderForCastling = [];
+  piecesDefended = [];
+  allPossibleMovesToConsiderForChecking = [];
+  allPossibleMovesWhite = [];
+  forbiddenWhiteKingMoves = [];
+  forbiddenBlackKingMoves = [];
+  movesForWhiteOpenCheckPiece = [];
 
- pieces_checking_white_king=[]
- pieces_checking_black_king=[]
+  pieces_checking_white_king = [];
+  pieces_checking_black_king = [];
 
- threefold_repetition=["","","","","","","","","",""]
+  threefold_repetition = ["", "", "", "", "", "", "", "", "", ""];
 
- pieces_around_white_king=[]
- pieces_around_black_king=[]
+  pieces_around_white_king = [];
+  pieces_around_black_king = [];
 
+  opponent_pieces_around_white_king = [];
+  opponent_pieces_around_black_king = [];
 
- opponent_pieces_around_white_king=[]
- opponent_pieces_around_black_king=[]
+  pieces_protecting_white_king = [];
+  pieces_protecting_black_king = [];
 
+  allMovesForWhiteOpenCheck = [];
 
- pieces_protecting_white_king=[]
- pieces_protecting_black_king=[]
+  allMovesForBlackOpenCheck = [];
 
- allMovesForWhiteOpenCheck=[]
+  allPossibleMovesBlackWhenChecked = [];
+  allPossibleMovesWhiteWhenChecked = [];
 
- allMovesForBlackOpenCheck=[]
+  squaresToCheckQueenSideWhite = [];
 
+  squaresToCheckKingSideWhite = [];
 
- allPossibleMovesBlackWhenChecked = [];
- allPossibleMovesWhiteWhenChecked = [];
+  squaresToCheckQueenSideBlack = [];
 
- squaresToCheckQueenSideWhite = [];
+  squaresToCheckKingSideBlack = [];
+  boardLength = 600;
+  whiteKing = null;
+  blackKing = null;
 
- squaresToCheckKingSideWhite = [];
+  whiteKingChecked = false;
+  blackKingChecked = false;
+  //square colors
+  lightColor = "#eff";
+  darkColor = "brown";
+  removed = false;
+  //piece imgs
+  white_none_img;
+  white_king_img;
+  white_pawn_img;
+  white_knight_img;
+  white_bishop_img;
+  white_rook_img;
+  white_queen_img;
 
- squaresToCheckQueenSideBlack = [];
+  black_none_img;
+  black_king_img;
+  black_pawn_img;
+  black_knight_img;
+  black_bishop_img;
+  black_rook_img;
+  black_queen_img;
 
- squaresToCheckKingSideBlack = [];
- boardLength = 600;
- whiteKing = null;
- blackKing = null;
+  pieces = [];
 
- whiteKingChecked = false;
- blackKingChecked = false;
-//square colors
- lightColor = "#eff";
- darkColor = "brown";
- removed = false;
-//piece imgs
- white_none_img;
- white_king_img;
- white_pawn_img;
- white_knight_img;
- white_bishop_img;
- white_rook_img;
- white_queen_img;
+  squares = [];
+  white_pieces = [];
+  black_pieces = [];
+  removedPieces = [];
+  //FEN String
+  currentFEN;
+  piecePlacement = "";
+  activeColor = "w";
+  whiteCastlingRights = "-";
+  blackCastlingRights = "-";
+  castlingRights = "-";
+  halfMoveClock = 0;
+  fullMoveNumber = 0;
+  possibleEnPassantTarget = "-";
 
- black_none_img;
- black_king_img;
- black_pawn_img;
- black_knight_img;
- black_bishop_img;
- black_rook_img;
- black_queen_img;
-
- pieces = [];
-
- squares = [];
- white_pieces = [];
- black_pieces = [];
- removedPieces = [];
-//FEN String
- currentFEN;
- piecePlacement = "";
- activeColor = "w";
- whiteCastlingRights = "-";
- blackCastlingRights = "-";
- castlingRights = "-";
- halfMoveClock = 0;
- fullMoveNumber = 0;
- possibleEnPassantTarget = "-";
-
- gameState=null
-loadGame(startFEN)
+  gameState = null;
+  loadGame(startFEN);
 }
 class Game {
-  
-  constructor(over=false,playerOne="player 1",playerTwo ="player 2"){
-
-    this.over = over
-    this.drawRequested = false
-    this.players={
-      "white":playerOne,
-      "black":playerTwo
-    }
-    this.message=""
-    this.moves=[]
-    this.move=null
-
+  constructor(over = false, playerOne = "player 1", playerTwo = "player 2") {
+    this.over = over;
+    this.drawRequested = false;
+    this.players = {
+      white: playerOne,
+      black: playerTwo,
+    };
+    this.message = "";
+    this.moves = [];
+    this.move = null;
   }
-
 }
 class Square {
   constructor(x, y, length, occupied = false, color, type, name) {
@@ -277,22 +267,26 @@ class Square {
     fill(this.color);
 
     square(this.x, this.y, this.length);
-    fill("black")
-    if(nameEachSquare){
-      
-      text(this.name, this.x, this.y,boardLength/10);
-    }
-    else{
-      
-    
-      if(this.name.charAt(0) === "a"){
-        
-      text(this.name.charAt(1), this.x , this.y + this.length/2,boardLength/10);
+    fill("black");
+    if (nameEachSquare) {
+      text(this.name, this.x, this.y, boardLength / 10);
+    } else {
+      if (this.name.charAt(0) === "a") {
+        text(
+          this.name.charAt(1),
+          this.x,
+          this.y + this.length / 2,
+          boardLength / 10
+        );
       }
-      if(this.name.charAt(1) === "1"){
-        
-        text(this.name.charAt(0), this.x + this.length/2,this.y + this.length - 9 ,boardLength/10);
-        }
+      if (this.name.charAt(1) === "1") {
+        text(
+          this.name.charAt(0),
+          this.x + this.length / 2,
+          this.y + this.length - 9,
+          boardLength / 10
+        );
+      }
     }
   }
 }
@@ -309,25 +303,22 @@ class Piece {
     this.size = size;
     this.legalMoves = [];
   }
-  changeMoves(moves){
-    this.legalMoves=moves
+  changeMoves(moves) {
+    this.legalMoves = moves;
   }
 
-  swapPiece(newName,pieceImg){
-    let name = this.color = "white" ? newName : newName.toLowerCase()
-    this.changeName(name)
-    
-    this.changeImage(pieceImg)
-  }
-  
-  changeImage(imagem){
-    this.image= imagem
+  swapPiece(newName, pieceImg) {
+    let name = (this.color = "white" ? newName : newName.toLowerCase());
+    this.changeName(name);
 
-    
+    this.changeImage(pieceImg);
   }
-  changeName(pieceName){
-    
-    this.name= pieceName
+
+  changeImage(imagem) {
+    this.image = imagem;
+  }
+  changeName(pieceName) {
+    this.name = pieceName;
   }
   clicked(px, py) {
     let inside = this.FindPoint(
@@ -349,24 +340,26 @@ class Piece {
 
     return false;
   }
-  move(px, py,flags="n") {
-    
-    moving =true
+  move(px, py, flags = "n") {
+    moving = true;
     console.log("move - here");
     let color = this.color;
     let name = this.name.toLowerCase();
 
-    
-    let newMove={ color: color.charAt(0), from: prevSelectedBox.name, to: selectedBox.name,
-    flags: flags, piece: name.charAt(0)}
+    let newMove = {
+      color: color.charAt(0),
+      from: prevSelectedBox.name,
+      to: selectedBox.name,
+      flags: flags,
+      piece: name.charAt(0),
+    };
     if (color.startsWith(activeColor)) {
-      
-    let threefoldrecord = `${piecePlacement} ${possibleEnPassantTarget}`
-    
-    console.log("Three fold record",threefoldrecord)
-    
-    console.log("Three fold repitionnnnnn",threefold_repetition)
-    checkThreeFoldRepetition( threefoldrecord)
+      let threefoldrecord = `${piecePlacement} ${possibleEnPassantTarget}`;
+
+      console.log("Three fold record", threefoldrecord);
+
+      console.log("Three fold repitionnnnnn", threefold_repetition);
+      checkThreeFoldRepetition(threefoldrecord);
       if (activeColor === "b") {
         fullMoveNumber++;
         console.log("fm", fullMoveNumber);
@@ -395,7 +388,7 @@ class Piece {
           if (indexOfQueenSquare === 2) {
             this.x = px;
             this.y = py;
-            newMove.flags='q'
+            newMove.flags = "q";
             for (let p of pieces) {
               if (
                 p.x === squaresToCheckQueenSideWhite[0].x &&
@@ -408,12 +401,11 @@ class Piece {
                 squaresToCheckQueenSideWhite[3].occupied = true;
               }
             }
-          }
-          else if (indexOfKingSquare === 2) {
+          } else if (indexOfKingSquare === 2) {
             this.x = px;
             this.y = py;
-            
-            newMove.flags='k'
+
+            newMove.flags = "k";
             for (let p of pieces) {
               if (
                 p.x ===
@@ -434,8 +426,7 @@ class Piece {
                 squaresToCheckKingSideWhite[1].occupied = true;
               }
             }
-          }
-          else{
+          } else {
             this.x = px;
             this.y = py;
           }
@@ -456,7 +447,7 @@ class Piece {
           if (indexOfQueenSquare === 2) {
             this.x = px;
             this.y = py;
-            newMove.flags='q'
+            newMove.flags = "q";
             for (let p of pieces) {
               if (
                 p.x === squaresToCheckQueenSideBlack[0].x &&
@@ -469,11 +460,10 @@ class Piece {
                 squaresToCheckQueenSideBlack[3].occupied = true;
               }
             }
-          }
-          else if (indexOfKingSquare === 2) {
+          } else if (indexOfKingSquare === 2) {
             this.x = px;
             this.y = py;
-            newMove.flags='k'
+            newMove.flags = "k";
             for (let p of pieces) {
               if (
                 p.x ===
@@ -494,12 +484,10 @@ class Piece {
                 squaresToCheckKingSideBlack[1].occupied = true;
               }
             }
-          }
-          else{
+          } else {
             this.x = px;
             this.y = py;
           }
-        
         }
       } else if (name === "rook") {
         if (castlingRights) {
@@ -524,7 +512,7 @@ class Piece {
                 if (indexOfQueenSquare === 3) {
                   this.x = px;
                   this.y = py;
-                  newMove.flags='q'
+                  newMove.flags = "q";
                   for (let p of pieces) {
                     if (
                       p.x === squaresToCheckQueenSideWhite[4].x &&
@@ -539,8 +527,7 @@ class Piece {
                   }
                 }
               }
-            }
-            else if (castlingRights.includes("K")) {
+            } else if (castlingRights.includes("K")) {
               if (
                 this.x === squaresToCheckKingSideWhite[3].x &&
                 this.y === squaresToCheckKingSideWhite[3].y
@@ -548,7 +535,7 @@ class Piece {
                 if (indexOfKingSquare === 1) {
                   this.x = px;
                   this.y = py;
-                  newMove.flags='k'
+                  newMove.flags = "k";
                   for (let p of pieces) {
                     if (
                       p.x === squaresToCheckKingSideWhite[0].x &&
@@ -564,13 +551,12 @@ class Piece {
                   }
                 }
               }
-            }else{
+            } else {
               this.x = px;
               this.y = py;
             }
-          } 
+          }
           if (color === "black") {
-            
             function checkSquareForCastling(item) {
               return item.x === selectedBox.x && item.y === selectedBox.y;
             }
@@ -591,7 +577,7 @@ class Piece {
                 if (indexOfQueenSquare === 3) {
                   this.x = px;
                   this.y = py;
-                  newMove.flags='q'
+                  newMove.flags = "q";
                   for (let p of pieces) {
                     if (
                       p.x === squaresToCheckQueenSideBlack[4].x &&
@@ -606,8 +592,7 @@ class Piece {
                   }
                 }
               }
-            }
-            else if (castlingRights.includes("k")) {
+            } else if (castlingRights.includes("k")) {
               if (
                 this.x === squaresToCheckKingSideBlack[3].x &&
                 this.y === squaresToCheckKingSideBlack[3].y
@@ -615,7 +600,7 @@ class Piece {
                 if (indexOfKingSquare === 1) {
                   this.x = px;
                   this.y = py;
-                  newMove.flags='k'
+                  newMove.flags = "k";
                   for (let p of pieces) {
                     if (
                       p.x === squaresToCheckKingSideBlack[0].x &&
@@ -631,15 +616,14 @@ class Piece {
                   }
                 }
               }
-            }else{
+            } else {
               this.x = px;
               this.y = py;
             }
-          } 
-        } 
+          }
+        }
       } else {
-        
-        newMove.flags=flags
+        newMove.flags = flags;
         this.x = px;
         this.y = py;
       }
@@ -658,21 +642,20 @@ class Piece {
         }
       });
     }
-    if(name === "pawn"){
-      if(color ==="white" && this.y === 0){
-        requestPieceSwap(this)
-        newMove.flags="p"+newMove.flags
+    if (name === "pawn") {
+      if (color === "white" && this.y === 0) {
+        requestPieceSwap(this);
+        newMove.flags = "p" + newMove.flags;
       }
-      if(color === "black" && this.y === (boardLength - this.size)){
-        requestPieceSwap(this)
-        newMove.flags="p"+newMove.flags
-        
+      if (color === "black" && this.y === boardLength - this.size) {
+        requestPieceSwap(this);
+        newMove.flags = "p" + newMove.flags;
       }
     }
-    
-    gameState.move=newMove
-    console.log(gameState)
-    moving =false
+
+    gameState.move = newMove;
+    console.log(gameState);
+    moving = false;
   }
   show() {
     if (this.image) {
@@ -687,7 +670,15 @@ class Piece {
   }
 
   getPossibleMoves() {
-    if (this.color.startsWith(activeColor) || checkingCastling || whiteKingChecked || blackKingChecked || gettingKingCheckedStatus || checkingOpenCheck || trimingKingMoves) {
+    if (
+      this.color.startsWith(activeColor) ||
+      checkingCastling ||
+      whiteKingChecked ||
+      blackKingChecked ||
+      gettingKingCheckedStatus ||
+      checkingOpenCheck ||
+      trimingKingMoves
+    ) {
       let name = this.name.toLowerCase();
       switch (name) {
         case "pawn":
@@ -714,8 +705,8 @@ class Piece {
 
   getPawnMoves() {
     let moves = [];
-    let kingCheckingMoves=[]
-    let piecesGuardedByPiece=[]
+    let kingCheckingMoves = [];
+    let piecesGuardedByPiece = [];
     let px = this.x;
     let py = this.y;
     let inside = true;
@@ -723,8 +714,8 @@ class Piece {
 
     let size = this.size;
     let movesMade = this.movesMade;
-    let indexOfBlackKing= -1
-    let indexOfWhiteKing=-1
+    let indexOfBlackKing = -1;
+    let indexOfWhiteKing = -1;
     if (color === "white") {
       if (this.moved) {
         while (true) {
@@ -746,9 +737,9 @@ class Piece {
               let indexOfSquare = pieces.findIndex(checkSquare);
               if (indexOfSquare === -1) {
                 moves.push({ x: px, y: py });
-                if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+                if (blackKingChecked || whiteKingChecked) {
+                  kingCheckingMoves.push({ x: px, y: py });
+                }
               } else {
                 break;
               }
@@ -759,23 +750,20 @@ class Piece {
 
           py -= size;
         }
-        
-          
-          function checkForBlackKingSquare(item) {
-            return item.x === blackKing.x && item.y === blackKing.y;
-          }
 
-           indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
+        function checkForBlackKingSquare(item) {
+          return item.x === blackKing.x && item.y === blackKing.y;
+        }
 
-          if(blackKingChecked && indexOfBlackKing  !== -1){
-             
-              kingCheckingMoves.forEach(move=>{
-                
-              allPossibleMovesBlackWhenChecked.push(move)
-              })
-          }
+        indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare);
 
-          kingCheckingMoves= []
+        if (blackKingChecked && indexOfBlackKing !== -1) {
+          kingCheckingMoves.forEach((move) => {
+            allPossibleMovesBlackWhenChecked.push(move);
+          });
+        }
+
+        kingCheckingMoves = [];
 
         px = this.x + size;
         py = this.y - size;
@@ -806,15 +794,17 @@ class Piece {
               let indexOfSquare = pieces.findIndex(checkSquare);
               if (indexOfSquare !== -1) {
                 moves.push({ x: px, y: py });
-                if(blackKingChecked || whiteKingChecked){
-                  kingCheckingMoves.push({x: px, y: py})
-                  }
+                if (blackKingChecked || whiteKingChecked) {
+                  kingCheckingMoves.push({ x: px, y: py });
                 }
+              }
 
               function checkSquareForOwnPiece(item) {
-                return (item.x === px && item.y === py && item.color === color)
+                return item.x === px && item.y === py && item.color === color;
               }
-              let indexOfProtectedPiece = pieces.findIndex(checkSquareForOwnPiece);
+              let indexOfProtectedPiece = pieces.findIndex(
+                checkSquareForOwnPiece
+              );
               if (indexOfProtectedPiece !== -1) {
                 piecesGuardedByPiece.push(pieces[indexOfProtectedPiece]);
               }
@@ -826,21 +816,19 @@ class Piece {
           px = this.x - size;
           py = this.y - size;
         }
-        indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
+        indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare);
 
-        if(blackKingChecked && indexOfBlackKing  !== -1){
-           
-            kingCheckingMoves.forEach(move=>{
-              
-            allPossibleMovesBlackWhenChecked.push(move)
-            })
+        if (blackKingChecked && indexOfBlackKing !== -1) {
+          kingCheckingMoves.forEach((move) => {
+            allPossibleMovesBlackWhenChecked.push(move);
+          });
         }
-        
-        kingCheckingMoves= []
+
+        kingCheckingMoves = [];
         this.legalMoves = moves;
 
-        if(gettingKingCheckedStatus){
-          allPossibleMovesToConsiderForChecking=moves
+        if (gettingKingCheckedStatus) {
+          allPossibleMovesToConsiderForChecking = moves;
         }
         if (checkingCastling) {
           allPossibleMovesToConsiderForCastling = moves;
@@ -868,9 +856,9 @@ class Piece {
               let indexOfSquare = pieces.findIndex(checkSquare);
               if (indexOfSquare === -1) {
                 moves.push({ x: px, y: py });
-                if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+                if (blackKingChecked || whiteKingChecked) {
+                  kingCheckingMoves.push({ x: px, y: py });
+                }
               } else {
                 break;
               }
@@ -885,17 +873,15 @@ class Piece {
           return item.x === blackKing.x && item.y === blackKing.y;
         }
 
-         indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
+        indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare);
 
-        if(blackKingChecked && indexOfBlackKing  !== -1){
-           
-            kingCheckingMoves.forEach(move=>{
-              
-            allPossibleMovesBlackWhenChecked.push(move)
-            })
+        if (blackKingChecked && indexOfBlackKing !== -1) {
+          kingCheckingMoves.forEach((move) => {
+            allPossibleMovesBlackWhenChecked.push(move);
+          });
         }
-        
-        kingCheckingMoves= []
+
+        kingCheckingMoves = [];
         px = this.x + size;
         py = this.y - size;
         while (true) {
@@ -925,15 +911,17 @@ class Piece {
               let indexOfSquare = pieces.findIndex(checkSquare);
               if (indexOfSquare !== -1) {
                 moves.push({ x: px, y: py });
-                if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
+                if (blackKingChecked || whiteKingChecked) {
+                  kingCheckingMoves.push({ x: px, y: py });
                 }
               }
 
               function checkSquareForOwnPiece(item) {
-                return (item.x === px && item.y === py && item.color === color)
+                return item.x === px && item.y === py && item.color === color;
               }
-              let indexOfProtectedPiece = pieces.findIndex(checkSquareForOwnPiece);
+              let indexOfProtectedPiece = pieces.findIndex(
+                checkSquareForOwnPiece
+              );
               if (indexOfProtectedPiece !== -1) {
                 piecesGuardedByPiece.push(pieces[indexOfProtectedPiece]);
               }
@@ -945,21 +933,19 @@ class Piece {
           px = this.x - size;
           py = this.y - size;
         }
-        indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
+        indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare);
 
-        if(blackKingChecked && indexOfBlackKing  !== -1){
-           
-            kingCheckingMoves.forEach(move=>{
-              
-            allPossibleMovesBlackWhenChecked.push(move)
-            })
+        if (blackKingChecked && indexOfBlackKing !== -1) {
+          kingCheckingMoves.forEach((move) => {
+            allPossibleMovesBlackWhenChecked.push(move);
+          });
         }
-        
-        kingCheckingMoves= []
+
+        kingCheckingMoves = [];
         this.legalMoves = moves;
 
-        if(gettingKingCheckedStatus){
-          allPossibleMovesToConsiderForChecking=moves
+        if (gettingKingCheckedStatus) {
+          allPossibleMovesToConsiderForChecking = moves;
         }
         if (checkingCastling) {
           allPossibleMovesToConsiderForCastling = moves;
@@ -989,9 +975,9 @@ class Piece {
               let indexOfSquare = pieces.findIndex(checkSquare);
               if (indexOfSquare === -1) {
                 moves.push({ x: px, y: py });
-                if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+                if (blackKingChecked || whiteKingChecked) {
+                  kingCheckingMoves.push({ x: px, y: py });
+                }
               } else {
                 break;
               }
@@ -1006,17 +992,17 @@ class Piece {
           return item.x === whiteKing.x && item.y === whiteKing.y;
         }
 
-        let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
+        let indexOfWhiteKing = kingCheckingMoves.findIndex(
+          checkForWhiteKingSquare
+        );
 
-        if(whiteKingChecked && indexOfWhiteKing  !== -1){
-           
-            kingCheckingMoves.forEach(move=>{
-              
-            allPossibleMovesWhiteWhenChecked.push(move)
-            })
+        if (whiteKingChecked && indexOfWhiteKing !== -1) {
+          kingCheckingMoves.forEach((move) => {
+            allPossibleMovesWhiteWhenChecked.push(move);
+          });
         }
-        
-        kingCheckingMoves= []
+
+        kingCheckingMoves = [];
         px = this.x + size;
         py = this.y + size;
         while (true) {
@@ -1046,15 +1032,17 @@ class Piece {
               let indexOfSquare = pieces.findIndex(checkSquare);
               if (indexOfSquare !== -1) {
                 moves.push({ x: px, y: py });
-                if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
+                if (blackKingChecked || whiteKingChecked) {
+                  kingCheckingMoves.push({ x: px, y: py });
                 }
               }
 
               function checkSquareForOwnPiece(item) {
-                return (item.x === px && item.y === py && item.color === color)
+                return item.x === px && item.y === py && item.color === color;
               }
-              let indexOfProtectedPiece = pieces.findIndex(checkSquareForOwnPiece);
+              let indexOfProtectedPiece = pieces.findIndex(
+                checkSquareForOwnPiece
+              );
               if (indexOfProtectedPiece !== -1) {
                 piecesGuardedByPiece.push(pieces[indexOfProtectedPiece]);
               }
@@ -1066,21 +1054,19 @@ class Piece {
           px = this.x - size;
           py = this.y + size;
         }
-         indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
+        indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare);
 
-        if(whiteKingChecked && indexOfWhiteKing  !== -1){
-           
-            kingCheckingMoves.forEach(move=>{
-              
-            allPossibleMovesWhiteWhenChecked.push(move)
-            })
+        if (whiteKingChecked && indexOfWhiteKing !== -1) {
+          kingCheckingMoves.forEach((move) => {
+            allPossibleMovesWhiteWhenChecked.push(move);
+          });
         }
-        
-        kingCheckingMoves= []
+
+        kingCheckingMoves = [];
         this.legalMoves = moves;
 
-        if(gettingKingCheckedStatus){
-          allPossibleMovesToConsiderForChecking=moves
+        if (gettingKingCheckedStatus) {
+          allPossibleMovesToConsiderForChecking = moves;
         }
         if (checkingCastling) {
           allPossibleMovesToConsiderForCastling = moves;
@@ -1107,9 +1093,9 @@ class Piece {
               let indexOfSquare = pieces.findIndex(checkSquare);
               if (indexOfSquare === -1) {
                 moves.push({ x: px, y: py });
-                if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+                if (blackKingChecked || whiteKingChecked) {
+                  kingCheckingMoves.push({ x: px, y: py });
+                }
               } else {
                 break;
               }
@@ -1120,22 +1106,20 @@ class Piece {
 
           py += size;
         }
-        
+
         function checkForWhiteKingSquare(item) {
           return item.x === whiteKing.x && item.y === whiteKing.y;
         }
 
-        indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
+        indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare);
 
-        if(whiteKingChecked && indexOfWhiteKing  !== -1){
-           
-            kingCheckingMoves.forEach(move=>{
-              
-            allPossibleMovesWhiteWhenChecked.push(move)
-            })
+        if (whiteKingChecked && indexOfWhiteKing !== -1) {
+          kingCheckingMoves.forEach((move) => {
+            allPossibleMovesWhiteWhenChecked.push(move);
+          });
         }
-        
-        kingCheckingMoves= []
+
+        kingCheckingMoves = [];
         px = this.x + size;
         py = this.y + size;
         while (true) {
@@ -1165,15 +1149,17 @@ class Piece {
               let indexOfSquare = pieces.findIndex(checkSquare);
               if (indexOfSquare !== -1) {
                 moves.push({ x: px, y: py });
-                if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
+                if (blackKingChecked || whiteKingChecked) {
+                  kingCheckingMoves.push({ x: px, y: py });
                 }
               }
 
               function checkSquareForOwnPiece(item) {
-                return (item.x === px && item.y === py && item.color === color)
+                return item.x === px && item.y === py && item.color === color;
               }
-              let indexOfProtectedPiece = pieces.findIndex(checkSquareForOwnPiece);
+              let indexOfProtectedPiece = pieces.findIndex(
+                checkSquareForOwnPiece
+              );
               if (indexOfProtectedPiece !== -1) {
                 piecesGuardedByPiece.push(pieces[indexOfProtectedPiece]);
               }
@@ -1185,24 +1171,22 @@ class Piece {
           px = this.x - size;
           py = this.y + size;
         }
-      
-         indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
 
-        if(whiteKingChecked && indexOfWhiteKing  !== -1){
-           
-            kingCheckingMoves.forEach(move=>{
-              
-            allPossibleMovesWhiteWhenChecked.push(move)
-            })
+        indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare);
+
+        if (whiteKingChecked && indexOfWhiteKing !== -1) {
+          kingCheckingMoves.forEach((move) => {
+            allPossibleMovesWhiteWhenChecked.push(move);
+          });
         }
-        piecesGuardedByPiece.forEach(piece=>{
-          piecesDefended.push(piece)
-        })
-        kingCheckingMoves= []
+        piecesGuardedByPiece.forEach((piece) => {
+          piecesDefended.push(piece);
+        });
+        kingCheckingMoves = [];
         this.legalMoves = moves;
 
-        if(gettingKingCheckedStatus){
-          allPossibleMovesToConsiderForChecking=moves
+        if (gettingKingCheckedStatus) {
+          allPossibleMovesToConsiderForChecking = moves;
         }
         if (checkingCastling) {
           allPossibleMovesToConsiderForCastling = moves;
@@ -1215,8 +1199,8 @@ class Piece {
 
   getKnightMoves() {
     let moves = [];
-    let kingCheckingMoves=[]
-    let piecesGuardedByPiece=[]
+    let kingCheckingMoves = [];
+    let piecesGuardedByPiece = [];
     let px = this.x;
     let py = this.y;
     let inside = true;
@@ -1250,55 +1234,55 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (
           (indexOfSquare === -1 && indexOfOwn === -1) ||
           indexOfSquare !== -1
         ) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         }
       }
-      
+
       if (checkedSquares === 2) {
         break;
       }
       checkedSquares++;
       px = this.x - size;
     }
-   if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        allPossibleMovesBlackWhenChecked.push({ x: this.x, y: this.y });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        allPossibleMovesWhiteWhenChecked.push({ x: this.x, y: this.y });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        
-          
-        allPossibleMovesBlackWhenChecked.push({x:this.x,y:this.y})
-        
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        
-          
-        allPossibleMovesWhiteWhenChecked.push({x:this.x,y:this.y})
-        
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //right
     checkedSquares = 1;
 
@@ -1327,56 +1311,55 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (
           (indexOfSquare === -1 && indexOfOwn === -1) ||
           indexOfSquare !== -1
         ) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         }
       }
-      
-      
+
       if (checkedSquares === 2) {
         break;
       }
       checkedSquares++;
       py = this.y + size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        allPossibleMovesBlackWhenChecked.push({ x: this.x, y: this.y });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        allPossibleMovesWhiteWhenChecked.push({ x: this.x, y: this.y });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        
-          
-        allPossibleMovesBlackWhenChecked.push({x:this.x,y:this.y})
-        
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        
-          
-        allPossibleMovesWhiteWhenChecked.push({x:this.x,y:this.y})
-        
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //bottom
     checkedSquares = 1;
 
@@ -1405,56 +1388,55 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (
           (indexOfSquare === -1 && indexOfOwn === -1) ||
           indexOfSquare !== -1
         ) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         }
       }
-      
-      
+
       if (checkedSquares === 2) {
         break;
       }
       checkedSquares++;
       px = this.x - size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        allPossibleMovesBlackWhenChecked.push({ x: this.x, y: this.y });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        allPossibleMovesWhiteWhenChecked.push({ x: this.x, y: this.y });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        
-          
-        allPossibleMovesBlackWhenChecked.push({x:this.x,y:this.y})
-        
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        
-          
-        allPossibleMovesWhiteWhenChecked.push({x:this.x,y:this.y})
-        
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //left
     checkedSquares = 1;
 
@@ -1483,62 +1465,61 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (
           (indexOfSquare === -1 && indexOfOwn === -1) ||
           indexOfSquare !== -1
         ) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         }
       }
-      
-      
+
       if (checkedSquares === 2) {
         break;
       }
       checkedSquares++;
       py = this.y + size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        allPossibleMovesBlackWhenChecked.push({ x: this.x, y: this.y });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        allPossibleMovesWhiteWhenChecked.push({ x: this.x, y: this.y });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        
-          
-        allPossibleMovesBlackWhenChecked.push({x:this.x,y:this.y})
-        
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        
-          
-        allPossibleMovesWhiteWhenChecked.push({x:this.x,y:this.y})
-        
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     this.legalMoves = moves;
-    piecesGuardedByPiece.forEach(piece=>{
-      piecesDefended.push(piece)
-    })
-    if(gettingKingCheckedStatus){
-      allPossibleMovesToConsiderForChecking=moves
+    piecesGuardedByPiece.forEach((piece) => {
+      piecesDefended.push(piece);
+    });
+    if (gettingKingCheckedStatus) {
+      allPossibleMovesToConsiderForChecking = moves;
     }
     if (checkingCastling) {
       allPossibleMovesToConsiderForCastling = moves;
@@ -1549,8 +1530,8 @@ class Piece {
 
   getRookMoves() {
     let moves = [];
-    let kingCheckingMoves=[]
-    let piecesGuardedByPiece=[]
+    let kingCheckingMoves = [];
+    let piecesGuardedByPiece = [];
     let px = this.x;
     let py = this.y;
     let inside = true;
@@ -1584,21 +1565,21 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        
-      if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -1608,34 +1589,38 @@ class Piece {
       }
       py -= size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //right
 
     px = this.x + size;
@@ -1663,23 +1648,23 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        
-      if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
-        if(indexOfOwn !== -1){
-          piecesGuardedByPiece.push(pieces[indexOfOwn])
+
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
         }
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -1689,34 +1674,38 @@ class Piece {
       }
       px += size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //bottom
 
     px = this.x;
@@ -1744,20 +1733,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        
-      if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -1767,34 +1756,38 @@ class Piece {
       }
       py += size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //left
 
     px = this.x - size;
@@ -1822,23 +1815,23 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        
-      if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
-        if(indexOfOwn !== -1){
-          piecesGuardedByPiece.push(pieces[indexOfOwn])
+
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
         }
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -1848,54 +1841,56 @@ class Piece {
       }
       px -= size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     this.legalMoves = moves;
-    piecesGuardedByPiece.forEach(piece=>{
-      piecesDefended.push(piece)
-    })
-    if(gettingKingCheckedStatus){
-      allPossibleMovesToConsiderForChecking=moves
+    piecesGuardedByPiece.forEach((piece) => {
+      piecesDefended.push(piece);
+    });
+    if (gettingKingCheckedStatus) {
+      allPossibleMovesToConsiderForChecking = moves;
     }
     if (checkingCastling) {
       allPossibleMovesToConsiderForCastling = moves;
     } else {
       possibleMoves = moves;
-
-      
     }
   }
 
   getBishopMoves() {
     let moves = [];
-    let kingCheckingMoves=[]
-    let piecesGuardedByPiece=[]
+    let kingCheckingMoves = [];
+    let piecesGuardedByPiece = [];
     let px = this.x;
     let py = this.y;
     let inside = true;
@@ -1931,20 +1926,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -1956,34 +1951,38 @@ class Piece {
       px += size;
       py -= size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //right
 
     px = this.x + size;
@@ -2011,20 +2010,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2035,34 +2034,38 @@ class Piece {
       px += size;
       py += size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //bottom
 
     px = this.x - size;
@@ -2090,20 +2093,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2114,34 +2117,38 @@ class Piece {
       px -= size;
       py += size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //left
 
     px = this.x - size;
@@ -2169,20 +2176,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2193,52 +2200,55 @@ class Piece {
       px -= size;
       py -= size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     this.legalMoves = moves;
-    piecesGuardedByPiece.forEach(piece=>{
-      piecesDefended.push(piece)
-    })
-    if(gettingKingCheckedStatus){
-      allPossibleMovesToConsiderForChecking=moves
+    piecesGuardedByPiece.forEach((piece) => {
+      piecesDefended.push(piece);
+    });
+    if (gettingKingCheckedStatus) {
+      allPossibleMovesToConsiderForChecking = moves;
     }
     if (checkingCastling) {
       allPossibleMovesToConsiderForCastling = moves;
     } else {
       possibleMoves = moves;
-      
     }
   }
   getQueenMoves() {
     let moves = [];
-    let kingCheckingMoves=[]
-    let piecesGuardedByPiece=[]
+    let kingCheckingMoves = [];
+    let piecesGuardedByPiece = [];
     let px = this.x;
     let py = this.y;
     let inside = true;
@@ -2272,20 +2282,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2295,34 +2305,38 @@ class Piece {
       }
       py -= size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //right
 
     px = this.x + size;
@@ -2350,20 +2364,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2373,34 +2387,38 @@ class Piece {
       }
       px += size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //bottom
 
     px = this.x;
@@ -2428,20 +2446,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2451,34 +2469,38 @@ class Piece {
       }
       py += size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //left
 
     px = this.x - size;
@@ -2506,20 +2528,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2530,34 +2552,38 @@ class Piece {
       px -= size;
     }
 
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //diagonal
     px = this.x + size;
     py = this.y - size;
@@ -2584,20 +2610,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2609,34 +2635,38 @@ class Piece {
       px += size;
       py -= size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //right
 
     px = this.x + size;
@@ -2664,20 +2694,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2688,34 +2718,38 @@ class Piece {
       px += size;
       py += size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //bottom
 
     px = this.x - size;
@@ -2743,20 +2777,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2767,34 +2801,38 @@ class Piece {
       px -= size;
       py += size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //left
 
     px = this.x - size;
@@ -2822,20 +2860,20 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
           break;
@@ -2846,53 +2884,56 @@ class Piece {
       px -= size;
       py -= size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     this.legalMoves = moves;
-    piecesGuardedByPiece.forEach(piece=>{
-      piecesDefended.push(piece)
-    })
-    if(gettingKingCheckedStatus){
-      allPossibleMovesToConsiderForChecking=moves
+    piecesGuardedByPiece.forEach((piece) => {
+      piecesDefended.push(piece);
+    });
+    if (gettingKingCheckedStatus) {
+      allPossibleMovesToConsiderForChecking = moves;
     }
     if (checkingCastling) {
       allPossibleMovesToConsiderForCastling = moves;
     } else {
       possibleMoves = moves;
-      
     }
   }
 
   getKingMoves() {
     let moves = [];
-    let kingCheckingMoves=[]
-    let piecesGuardedByPiece=[]
+    let kingCheckingMoves = [];
+    let piecesGuardedByPiece = [];
     let px = this.x;
     let py = this.y;
     let inside = true;
@@ -2926,24 +2967,22 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
-          
-          
           break;
         }
       } else {
@@ -2954,34 +2993,38 @@ class Piece {
       }
       py -= size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //right
 
     checkedSquares = 1;
@@ -3010,24 +3053,22 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
-          
-          
           break;
         }
       } else {
@@ -3039,34 +3080,38 @@ class Piece {
       px += size;
     }
 
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //bottom
     checkedSquares = 1;
 
@@ -3095,24 +3140,22 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
-          
-          
           break;
         }
       } else {
@@ -3123,34 +3166,38 @@ class Piece {
       }
       py += size;
     }
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //left
 
     checkedSquares = 1;
@@ -3180,24 +3227,22 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
-          
-          
           break;
         }
       } else {
@@ -3209,34 +3254,38 @@ class Piece {
       px -= size;
     }
 
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //top-right
     checkedSquares = 1;
     px = this.x + size;
@@ -3264,24 +3313,22 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
-          
-          
           break;
         }
       } else {
@@ -3295,34 +3342,38 @@ class Piece {
       py -= size;
     }
 
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //right-btm
 
     checkedSquares = 1;
@@ -3351,24 +3402,22 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
-          
-          
           break;
         }
       } else {
@@ -3381,34 +3430,38 @@ class Piece {
       py += size;
     }
 
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //bottom-left
     checkedSquares = 1;
 
@@ -3437,24 +3490,22 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
-          
-          
           break;
         }
       } else {
@@ -3467,34 +3518,38 @@ class Piece {
       py += size;
     }
 
-    if(color==="white"){ function checkForBlackKingSquare(item) {
-      return item.x === blackKing.x && item.y === blackKing.y;
+    if (color === "white") {
+      function checkForBlackKingSquare(item) {
+        return item.x === blackKing.x && item.y === blackKing.y;
+      }
+
+      let indexOfBlackKing = kingCheckingMoves.findIndex(
+        checkForBlackKingSquare
+      );
+
+      if (blackKingChecked && indexOfBlackKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesBlackWhenChecked.push(move);
+        });
+      }
+    }
+    if (color === "black") {
+      function checkForWhiteKingSquare(item) {
+        return item.x === whiteKing.x && item.y === whiteKing.y;
+      }
+
+      let indexOfWhiteKing = kingCheckingMoves.findIndex(
+        checkForWhiteKingSquare
+      );
+
+      if (whiteKingChecked && indexOfWhiteKing !== -1) {
+        kingCheckingMoves.forEach((move) => {
+          allPossibleMovesWhiteWhenChecked.push(move);
+        });
+      }
     }
 
-    let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-
-    if(blackKingChecked && indexOfBlackKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesBlackWhenChecked.push(move)
-        })
-    }}
-    if(color === "black"){function checkForWhiteKingSquare(item) {
-      return item.x === whiteKing.x && item.y === whiteKing.y;
-    }
-
-    let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-
-    if(whiteKingChecked && indexOfWhiteKing  !== -1){
-       
-        kingCheckingMoves.forEach(move=>{
-          
-        allPossibleMovesWhiteWhenChecked.push(move)
-        })
-    }}
-    
-    kingCheckingMoves= []
+    kingCheckingMoves = [];
     //left-top
     checkedSquares = 1;
 
@@ -3523,24 +3578,22 @@ class Piece {
         }
 
         indexOfOwn = pieces.findIndex(checkForOwnPiece);
-        if(indexOfOwn !== -1){
-        piecesGuardedByPiece.push(pieces[indexOfOwn])
-      }
+        if (indexOfOwn !== -1) {
+          piecesGuardedByPiece.push(pieces[indexOfOwn]);
+        }
 
         if (indexOfSquare === -1 && indexOfOwn === -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
         } else if (indexOfSquare !== -1) {
           moves.push({ x: px, y: py });
-          if(blackKingChecked || whiteKingChecked){
-              kingCheckingMoves.push({x: px, y: py})
-            }
+          if (blackKingChecked || whiteKingChecked) {
+            kingCheckingMoves.push({ x: px, y: py });
+          }
           break;
         } else {
-          
-          
           break;
         }
       } else {
@@ -3553,8 +3606,8 @@ class Piece {
       py -= size;
     }
 
-    if(gettingKingCheckedStatus){
-      allPossibleMovesToConsiderForChecking=moves
+    if (gettingKingCheckedStatus) {
+      allPossibleMovesToConsiderForChecking = moves;
     }
     if (checkingCastling) {
       allPossibleMovesToConsiderForCastling = moves;
@@ -3589,37 +3642,41 @@ class Piece {
           }
         }
       }
-      if(color==="white"){ function checkForBlackKingSquare(item) {
-        return item.x === blackKing.x && item.y === blackKing.y;
+      if (color === "white") {
+        function checkForBlackKingSquare(item) {
+          return item.x === blackKing.x && item.y === blackKing.y;
+        }
+
+        let indexOfBlackKing = kingCheckingMoves.findIndex(
+          checkForBlackKingSquare
+        );
+
+        if (blackKingChecked && indexOfBlackKing !== -1) {
+          kingCheckingMoves.forEach((move) => {
+            allPossibleMovesBlackWhenChecked.push(move);
+          });
+        }
       }
-  
-      let indexOfBlackKing = kingCheckingMoves.findIndex(checkForBlackKingSquare)
-  
-      if(blackKingChecked && indexOfBlackKing  !== -1){
-         
-          kingCheckingMoves.forEach(move=>{
-            
-          allPossibleMovesBlackWhenChecked.push(move)
-          })
-      }}
-      if(color === "black"){function checkForWhiteKingSquare(item) {
-        return item.x === whiteKing.x && item.y === whiteKing.y;
+      if (color === "black") {
+        function checkForWhiteKingSquare(item) {
+          return item.x === whiteKing.x && item.y === whiteKing.y;
+        }
+
+        let indexOfWhiteKing = kingCheckingMoves.findIndex(
+          checkForWhiteKingSquare
+        );
+
+        if (whiteKingChecked && indexOfWhiteKing !== -1) {
+          kingCheckingMoves.forEach((move) => {
+            allPossibleMovesWhiteWhenChecked.push(move);
+          });
+        }
       }
-  
-      let indexOfWhiteKing = kingCheckingMoves.findIndex(checkForWhiteKingSquare)
-  
-      if(whiteKingChecked && indexOfWhiteKing  !== -1){
-         
-          kingCheckingMoves.forEach(move=>{
-            
-          allPossibleMovesWhiteWhenChecked.push(move)
-          })
-      }}
-      
-      kingCheckingMoves= []
-      piecesGuardedByPiece.forEach(piece=>{
-        piecesDefended.push(piece)
-      })
+
+      kingCheckingMoves = [];
+      piecesGuardedByPiece.forEach((piece) => {
+        piecesDefended.push(piece);
+      });
       this.legalMoves = moves;
       possibleMoves = moves;
     }
@@ -3680,9 +3737,13 @@ function preload() {
   );
 }
 
-let startFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
-let startFENCastle = "r3kbnr/2p1pp1p/p1nq2p1/1p1p1b2/P3P3/RPN2Q2/1BPP1PPP/4KBNR w q - 4 7";
-let startFENSwap = "rnbqkb1r/pp1pp1Pp/7n/5p2/3P4/2p1Q3/PPP1PP1P/RNB1KBNR w KQkq - 0 1";
+let startFEN = "4kp2/8/5P2/8/8/8/8/R3K2P w - - 0 1";
+//"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+let startCheckFEN = "4kp2/8/5P2/8/8/8/8/4K2P w - - 0 1";
+let startFENCastle =
+  "r3kbnr/2p1pp1p/p1nq2p1/1p1p1b2/P3P3/RPN2Q2/1BPP1PPP/4KBNR w q - 4 7";
+let startFENSwap =
+  "rnbqkb1r/pp1pp1Pp/7n/5p2/3P4/2p1Q3/PPP1PP1P/RNB1KBNR w KQkq - 0 1";
 let FEN2 = "7k/3N2qp/b5r1/2p1Q1N1/Pp4PK/7P/1P3p2/6r1 w KQkq - 0 1";
 function loadGame(fen_string) {
   let chess_pieces = {
@@ -3776,7 +3837,7 @@ function loadGame(fen_string) {
           return item.x === x && item.y === y * imgLength;
         }
         let indexOfSquare = squares.findIndex(checkSquare);
-        
+
         pieces.push(
           new Piece(
             chess_pieces[value].name,
@@ -3810,7 +3871,7 @@ function loadGame(fen_string) {
           return item.x === x && item.y === y * imgLength;
         }
         let indexOfSquare = squares.findIndex(checkSquare);
-        
+
         pieces.push(
           new Piece(
             chess_pieces[value].name,
@@ -3842,7 +3903,7 @@ function loadGame(fen_string) {
     });
   });
 
-  gameState = new Game(false,"jay","ndalamei")
+  gameState = new Game(false, "jay", "ndalamei");
 }
 function drawSquare(color, x, y, size) {
   fill(color);
@@ -3920,12 +3981,11 @@ function setup() {
   drawBoard();
   loadGame(startFEN);
   loadSquaresToCheck();
-  setInterval(()=>{
-    if(!gameState.over){
-      
-  generateFEN()
+  setInterval(() => {
+    if (!gameState.over) {
+      generateFEN();
     }
-  },3000)
+  }, 3000);
 }
 
 function draw() {
@@ -3968,14 +4028,19 @@ function draw() {
         );
       }
     }
-  }
-  else{
-    if(whiteKingChecked || blackKingChecked){
-
-      if(whiteKingChecked && activeColor.startsWith("w") && allPossibleMovesWhiteWhenChecked.length > 0){
+  } else {
+    if (whiteKingChecked || blackKingChecked) {
+      if (
+        whiteKingChecked &&
+        activeColor.startsWith("w") &&
+        allPossibleMovesWhiteWhenChecked.length > 0
+      ) {
         for (let i = 0; i < allPossibleMovesWhiteWhenChecked.length; i++) {
           function checkSquare(item) {
-            return item.x === allPossibleMovesWhiteWhenChecked[i].x && item.y === allPossibleMovesWhiteWhenChecked[i].y;
+            return (
+              item.x === allPossibleMovesWhiteWhenChecked[i].x &&
+              item.y === allPossibleMovesWhiteWhenChecked[i].y
+            );
           }
           let indexOfSquare = pieces.findIndex(checkSquare);
           if (indexOfSquare > -1) {
@@ -4003,12 +4068,17 @@ function draw() {
             );
           }
         }
-    
-      }
-      else if(blackKingChecked && activeColor.startsWith("b") && allPossibleMovesBlackWhenChecked.length > 0){
+      } else if (
+        blackKingChecked &&
+        activeColor.startsWith("b") &&
+        allPossibleMovesBlackWhenChecked.length > 0
+      ) {
         for (let i = 0; i < allPossibleMovesBlackWhenChecked.length; i++) {
           function checkSquare(item) {
-            return item.x === allPossibleMovesBlackWhenChecked[i].x && item.y === allPossibleMovesBlackWhenChecked[i].y;
+            return (
+              item.x === allPossibleMovesBlackWhenChecked[i].x &&
+              item.y === allPossibleMovesBlackWhenChecked[i].y
+            );
           }
           let indexOfSquare = pieces.findIndex(checkSquare);
           if (indexOfSquare > -1) {
@@ -4036,7 +4106,6 @@ function draw() {
             );
           }
         }
-    
       }
     }
   }
@@ -4044,12 +4113,9 @@ function draw() {
   for (let p of pieces) {
     p.show();
   }
-  if(gameState.over){
-    
-    endGame()
-  
+  if (gameState.over) {
+    endGame();
   }
-  
 }
 function setMoveType(prevSelectedPiece, pieceX, pieceY) {
   let name = prevSelectedPiece.name.toLowerCase();
@@ -4139,20 +4205,18 @@ function isEnPassantValid(prevSelectedPiece, pieceX, pieceY) {
               item.y - size === pieces[indexOfSquare].y
             );
           }
-          
-      let indexOfRemovedPiece = pieces.findIndex(checkPiece);
+
+          let indexOfRemovedPiece = pieces.findIndex(checkPiece);
           pieces.splice(indexOfSquare, 1);
 
-          
-            setTimeout(() => {
-              
+          setTimeout(() => {
             removedPieces.push(black_pieces[indexOfRemovedPiece]);
             halfMoveClock = 0;
 
             possibleMoves = [];
             selectedBox.occupied = true;
-                console.log("en ph")
-            }, 1000);
+            console.log("en ph");
+          }, 1000);
         } else {
           console.log("equal");
         }
@@ -4180,29 +4244,25 @@ function isEnPassantValid(prevSelectedPiece, pieceX, pieceY) {
           }
         }
         if (prevSelectedPiece !== pieces[indexOfSquare]) {
-          
-
           function checkPiece(item) {
             return (
               item.x === pieces[indexOfSquare].x &&
               item.y - size === pieces[indexOfSquare].y
             );
           }
-          
-      let indexOfRemovedPiece = pieces.findIndex(checkPiece);
+
+          let indexOfRemovedPiece = pieces.findIndex(checkPiece);
           pieces.splice(indexOfSquare, 1);
 
-          
-            setTimeout(() => {
-              
+          setTimeout(() => {
             removedPieces.push(white_pieces[indexOfRemovedPiece]);
-            
-          halfMoveClock = 0;
 
-          possibleMoves = [];
-          console.log("en ph");
-          selectedBox.occupied = true;
-            }, 1000);
+            halfMoveClock = 0;
+
+            possibleMoves = [];
+            console.log("en ph");
+            selectedBox.occupied = true;
+          }, 1000);
         } else {
           console.log("equal");
         }
@@ -4268,127 +4328,114 @@ function loadSquaresToCheck() {
   }
 }
 
-function checkStaleMate(){
+function checkStaleMate() {
+  if (!whiteKingChecked) {
+    let whiteMoves = 0;
 
-  if(!whiteKingChecked){
-      
-  let whiteMoves=0
-  
-  for(let p of pieces){
-    
-    if(p.color === "white" && p.name.toLowerCase() !== "king"){
-      let movesTocheck =p.legalMoves.slice(1)
-      movesTocheck.forEach(move=>{
-       
-          whiteMoves ++
-      })
-    }
-  }
-  whiteKing.legalMoves.forEach(move=>{
-   
-      whiteMoves ++
-  })
-
-  if(whiteMoves === 0){
-    
-    gameState.over = true
-    gameState.message=`draw! ${gameState.players["white"]} hit stalemate `
-  }
-  }
-
-  
-  if(!blackKingChecked){
-      
-    let blackMoves=0
-    
-    for(let p of pieces){
-      
-      if(p.color === "black" && p.name.toLowerCase() !== "king"){
-  
-        let movesTocheck =p.legalMoves.slice(1)
-        movesTocheck.forEach(move=>{
-         
-            blackMoves ++
-        })
+    for (let p of pieces) {
+      if (p.color === "white" && p.name.toLowerCase() !== "king") {
+        let movesTocheck = p.legalMoves.slice(1);
+        movesTocheck.forEach((move) => {
+          whiteMoves++;
+        });
       }
     }
-    blackKing.legalMoves.forEach(move=>{
-     
-        blackMoves ++
-    })
-  
-    if(blackMoves === 0){
-      
-      gameState.over = true
-      gameState.message=`draw! ${gameState.players["black"]} hit stalemate `
-    }
-    }
+    whiteKing.legalMoves.forEach((move) => {
+      whiteMoves++;
+    });
 
-}
-function checkFiftyMoveRule(){
-  
-  if(halfMoveClock === 100){
-      gameState.over = true
-      gameState.message=`draw! ${gameState.players["white"]} by 50 move rule `
-    
+    if (whiteMoves === 0) {
+      gameState.over = true;
+      gameState.message = `draw! ${gameState.players["white"]} hit stalemate `;
+    }
+  }
+
+  if (!blackKingChecked) {
+    let blackMoves = 0;
+
+    for (let p of pieces) {
+      if (p.color === "black" && p.name.toLowerCase() !== "king") {
+        let movesTocheck = p.legalMoves.slice(1);
+        movesTocheck.forEach((move) => {
+          blackMoves++;
+        });
+      }
+    }
+    blackKing.legalMoves.forEach((move) => {
+      blackMoves++;
+    });
+
+    if (blackMoves === 0) {
+      gameState.over = true;
+      gameState.message = `draw! ${gameState.players["black"]} hit stalemate `;
+    }
   }
 }
-function requestDraw(){
- console.log("give a draw?")
- gameState.drawRequested = true
- var message =document.getElementById("draw-req-message")
- message.innerText="Oponent requested a draw. Aceept Draw?"
- var dialog  = $( "#dialog-confirm-draw" ).dialog({
-   resizable: false,
-   height: "auto",
-   width: 400,
-   modal: true,
-   open:function () { $(".ui-dialog-titlebar-close").hide()},
-   closeOnEscape: false,
-   buttons: {
-     "Accept": function() {
-       acceptDraw()
-       $( this ).dialog( "close" );
-     },
-     Cancel: function() {
-       denyDraw()
-       $( this ).dialog( "close" );
-     }
-   }
- });
+function checkFiftyMoveRule() {
+  if (halfMoveClock === 100) {
+    gameState.over = true;
+    gameState.message = `draw! ${gameState.players["white"]} by 50 move rule `;
+  }
 }
-function endGame(){
-  var message =document.getElementById("game-over-message")
-  message.innerText=`${gameState.message}`
-  var dialog  = $( "#dialog-game-over" ).dialog({
+function requestDraw() {
+  console.log("give a draw?");
+  gameState.drawRequested = true;
+  var message = document.getElementById("draw-req-message");
+  message.innerText = "Oponent requested a draw. Aceept Draw?";
+  var dialog = $("#dialog-confirm-draw").dialog({
     resizable: false,
     height: "auto",
     width: 400,
     modal: true,
-    open:function () { $(".ui-dialog-titlebar-close").hide()},
-    closeOnEscape: false
-    
+    open: function () {
+      $(".ui-dialog-titlebar-close").hide();
+    },
+    closeOnEscape: false,
+    buttons: {
+      Accept: function () {
+        acceptDraw();
+        $(this).dialog("close");
+      },
+      Cancel: function () {
+        denyDraw();
+        $(this).dialog("close");
+      },
+    },
   });
- }
- function requestPieceSwap(piece){
-   
-  dialogOpen=true
-  var message =document.getElementById("swap-piece-message")
-  message.innerText=`${gameState.message}`
-  var dialog  = $( "#dialog-swap-piece" ).dialog({
+}
+function endGame() {
+  var message = document.getElementById("game-over-message");
+  message.innerText = `${gameState.message}`;
+  var dialog = $("#dialog-game-over").dialog({
     resizable: false,
     height: "auto",
     width: 400,
     modal: true,
-    open:function () { $(".ui-dialog-titlebar-close").hide()},
+    open: function () {
+      $(".ui-dialog-titlebar-close").hide();
+    },
+    closeOnEscape: false,
+  });
+}
+function requestPieceSwap(piece) {
+  dialogOpen = true;
+  var message = document.getElementById("swap-piece-message");
+  message.innerText = `${gameState.message}`;
+  var dialog = $("#dialog-swap-piece").dialog({
+    resizable: false,
+    height: "auto",
+    width: 400,
+    modal: true,
+    open: function () {
+      $(".ui-dialog-titlebar-close").hide();
+    },
     closeText: "hide",
-    closeOnEscape: false
-    
+    closeOnEscape: false,
   });
-  console.log(piece)
-  pieceToSwap=piece
- }
- function swapOutPiece(newPiece){
+  console.log(piece);
+  pieceToSwap = piece;
+}
+function swapOutPiece(newPiece) {
   let chess_pieces = {
     R: {
       color: "white",
@@ -4425,7 +4472,7 @@ function endGame(){
       image: black_rook_img,
       name: "rook",
     },
-  
+
     n: {
       color: "black",
       image: black_knight_img,
@@ -4452,791 +4499,772 @@ function endGame(){
       name: "pawn",
     },
   };
-  
-   if(pieceToSwap){
-     let name=newPiece
-     let imageKey
-    if(pieceToSwap.color === "white"){
-      name=name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
-      if(name ==="Knight"){
-        imageKey ="N"
-      }else{
-        imageKey =name.charAt(0)
+
+  if (pieceToSwap) {
+    let name = newPiece;
+    let imageKey;
+    if (pieceToSwap.color === "white") {
+      name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+      if (name === "Knight") {
+        imageKey = "N";
+      } else {
+        imageKey = name.charAt(0);
       }
     }
-    if(pieceToSwap.color === "black"){
-      name=name.toLowerCase()
-      if(name ==="knight"){
-        imageKey ="n"
-      }else{
-        imageKey =name.charAt(0)
+    if (pieceToSwap.color === "black") {
+      name = name.toLowerCase();
+      if (name === "knight") {
+        imageKey = "n";
+      } else {
+        imageKey = name.charAt(0);
       }
     }
-    
-    let image = chess_pieces[imageKey].image
-     pieceToSwap.swapPiece(newPiece,image)
-     pieceToSwap=null;
-     var dialog  = $( "#dialog-swap-piece" )
-     dialog.dialog("close");
-     
-  dialogOpen=false
-   }
- }
-function quitGame(){
-  dialogOpen=true
-  console.log("quit?")
-  var message =document.getElementById("game-quit-message")
-  message.innerText="Are you sure you want to quit game?"
-  var dialog  = $( "#dialog-game-quit" ).dialog({
+
+    let image = chess_pieces[imageKey].image;
+    pieceToSwap.swapPiece(newPiece, image);
+    pieceToSwap = null;
+    var dialog = $("#dialog-swap-piece");
+    dialog.dialog("close");
+
+    dialogOpen = false;
+  }
+}
+function quitGame() {
+  dialogOpen = true;
+  console.log("quit?");
+  var message = document.getElementById("game-quit-message");
+  message.innerText = "Are you sure you want to quit game?";
+  var dialog = $("#dialog-game-quit").dialog({
     resizable: false,
     height: "auto",
     width: 400,
     modal: true,
-    open:function () { $(".ui-dialog-titlebar-close").hide()},
+    open: function () {
+      $(".ui-dialog-titlebar-close").hide();
+    },
     closeOnEscape: false,
     buttons: {
-      "Quit": function() {
-        gameState.over=true
-        window.location.replace(window.location.origin)
-        
-        $( this ).dialog( "close" );
-        dialogOpen=false
-      },
-      Cancel: function() {
-        $( this ).dialog( "close" );
-        dialogOpen=false
-      }
-    }
-  });
- }
+      Quit: function () {
+        gameState.over = true;
+        window.location.replace(window.location.origin);
 
- function restartGame(){
-  dialogOpen=true
-  var message =document.getElementById("game-restart-message")
-  message.innerText="Are you sure you want to restart game?"
-  var dialog  = $( "#dialog-game-restart" ).dialog({
+        $(this).dialog("close");
+        dialogOpen = false;
+      },
+      Cancel: function () {
+        $(this).dialog("close");
+        dialogOpen = false;
+      },
+    },
+  });
+}
+
+function restartGame() {
+  dialogOpen = true;
+  var message = document.getElementById("game-restart-message");
+  message.innerText = "Are you sure you want to restart game?";
+  var dialog = $("#dialog-game-restart").dialog({
     resizable: false,
     height: "auto",
     width: 400,
     modal: true,
-    open:function () { $(".ui-dialog-titlebar-close").hide()},
+    open: function () {
+      $(".ui-dialog-titlebar-close").hide();
+    },
     closeOnEscape: false,
     buttons: {
-      "Restart": function() {
-        resetGame()
-        $( this ).dialog( "close" );
-        dialogOpen=false
+      Restart: function () {
+        resetGame();
+        $(this).dialog("close");
+        dialogOpen = false;
       },
-      Cancel: function() {
-        $( this ).dialog( "close" );
-        dialogOpen=false
+      Cancel: function () {
+        $(this).dialog("close");
+        dialogOpen = false;
+      },
+    },
+  });
+}
+
+function acceptDraw() {
+  gameState.drawRequested = false;
+  gameState.over = true;
+  gameState.message = `draw! ${gameState.players["white"]} by mutual agreement `;
+}
+function denyDraw() {
+  gameState.drawRequested = false;
+}
+function checkThreeFoldRepetition(newFEN) {
+  let count = 0;
+  for (let FEN of threefold_repetition) {
+    if (newFEN === FEN) {
+      count++;
+    }
+  }
+  if (count === 2) {
+    gameState.over = true;
+    gameState.message = `draw! by threefold repetition `;
+  } else {
+    let current;
+    let next;
+    for (let i = 0; i < threefold_repetition.length; i++) {
+      if (i === 0) {
+        current = newFEN;
+        next = threefold_repetition[i];
+      } else if (i < threefold_repetition.length - 1) {
+        current = next;
+        next = threefold_repetition[i];
+      } else {
+        current = next;
       }
+      threefold_repetition[i] = current;
+    }
+  }
+}
+function openCheck() {
+  getPiecesAroundKings(
+    whiteKing.x,
+    whiteKing.y,
+    whiteKing.color,
+    whiteKing.size
+  );
+
+  getPiecesAroundKings(
+    blackKing.x,
+    blackKing.y,
+    blackKing.color,
+    blackKing.size
+  );
+
+  getPiecesProtectingKings();
+}
+
+function getPiecesAroundKings(x, y, color, size) {
+  if (color === "white") {
+    pieces_around_white_king = [];
+    opponent_pieces_around_white_king = [];
+  }
+  if (color === "black") {
+    pieces_around_black_king = [];
+    opponent_pieces_around_black_king = [];
+  }
+
+  let px = x;
+  let py = y;
+  let inside = true;
+  //top
+  let foundOwn = false;
+  let opponent_pieces = [];
+  py = y - size;
+  while (true) {
+    inside = FindPoint(
+      boardLength - boardLength,
+      boardLength - boardLength,
+      boardLength,
+      boardLength,
+      px,
+      py
+    );
+    if (inside) {
+      let indexOfSquare;
+      let indexOfOwn;
+      function checkSquare(item) {
+        return item.x === px && item.y === py && item.color !== color;
+      }
+      indexOfSquare = pieces.findIndex(checkSquare);
+
+      function checkForOwnPiece(item) {
+        return item.x === px && item.y === py && item.color === color;
+      }
+
+      indexOfOwn = pieces.findIndex(checkForOwnPiece);
+
+      if (
+        indexOfSquare !== -1 &&
+        (pieces[indexOfSquare].name.toLowerCase() === "queen" ||
+          pieces[indexOfSquare].name.toLowerCase() === "rook")
+      ) {
+        if (indexOfOwn === -1) {
+          opponent_pieces.push(pieces[indexOfSquare]);
+        }
+
+        break;
+      } else {
+        if (!foundOwn) {
+          if (indexOfOwn > -1 && color === "white") {
+            pieces_around_white_king.push(pieces[indexOfOwn]);
+            foundOwn = true;
+          }
+          if (indexOfOwn > -1 && color === "black") {
+            pieces_around_black_king.push(pieces[indexOfOwn]);
+
+            foundOwn = true;
+          }
+        }
+      }
+    } else {
+      break;
+    }
+    py -= size;
+  }
+
+  foundOwn = false;
+  //right
+
+  px = x + size;
+  py = y;
+  while (true) {
+    inside = FindPoint(
+      boardLength - boardLength,
+      boardLength - boardLength,
+      boardLength,
+      boardLength,
+      px,
+      py
+    );
+    if (inside) {
+      let indexOfSquare;
+      let indexOfOwn;
+
+      function checkSquare(item) {
+        return item.x === px && item.y === py && item.color !== color;
+      }
+      indexOfSquare = pieces.findIndex(checkSquare);
+
+      function checkForOwnPiece(item) {
+        return item.x === px && item.y === py && item.color === color;
+      }
+
+      indexOfOwn = pieces.findIndex(checkForOwnPiece);
+
+      if (
+        indexOfSquare !== -1 &&
+        (pieces[indexOfSquare].name.toLowerCase() === "queen" ||
+          pieces[indexOfSquare].name.toLowerCase() === "rook")
+      ) {
+        if (indexOfOwn === -1) {
+          opponent_pieces.push(pieces[indexOfSquare]);
+        }
+
+        break;
+      } else {
+        if (!foundOwn) {
+          if (indexOfOwn > -1 && color === "white") {
+            pieces_around_white_king.push(pieces[indexOfOwn]);
+            foundOwn = true;
+          }
+          if (indexOfOwn > -1 && color === "black") {
+            pieces_around_black_king.push(pieces[indexOfOwn]);
+
+            foundOwn = true;
+          }
+        }
+      }
+    } else {
+      break;
+    }
+    px += size;
+  }
+
+  foundOwn = false;
+  //bottom
+
+  px = x;
+  py = y + size;
+  while (true) {
+    inside = FindPoint(
+      boardLength - boardLength,
+      boardLength - boardLength,
+      boardLength,
+      boardLength,
+      px,
+      py
+    );
+    if (inside) {
+      let indexOfSquare;
+      let indexOfOwn;
+
+      function checkSquare(item) {
+        return item.x === px && item.y === py && item.color !== color;
+      }
+      indexOfSquare = pieces.findIndex(checkSquare);
+
+      function checkForOwnPiece(item) {
+        return item.x === px && item.y === py && item.color === color;
+      }
+
+      indexOfOwn = pieces.findIndex(checkForOwnPiece);
+
+      if (
+        indexOfSquare !== -1 &&
+        (pieces[indexOfSquare].name.toLowerCase() === "queen" ||
+          pieces[indexOfSquare].name.toLowerCase() === "rook")
+      ) {
+        if (indexOfOwn === -1) {
+          opponent_pieces.push(pieces[indexOfSquare]);
+        }
+
+        break;
+      } else {
+        if (!foundOwn) {
+          if (indexOfOwn > -1 && color === "white") {
+            pieces_around_white_king.push(pieces[indexOfOwn]);
+            foundOwn = true;
+          }
+          if (indexOfOwn > -1 && color === "black") {
+            pieces_around_black_king.push(pieces[indexOfOwn]);
+
+            foundOwn = true;
+          }
+        }
+      }
+    } else {
+      break;
+    }
+    py += size;
+  }
+
+  foundOwn = false;
+  //left
+
+  px = x - size;
+  py = y;
+  while (true) {
+    inside = FindPoint(
+      boardLength - boardLength,
+      boardLength - boardLength,
+      boardLength,
+      boardLength,
+      px,
+      py
+    );
+    if (inside) {
+      let indexOfSquare;
+      let indexOfOwn;
+
+      function checkSquare(item) {
+        return item.x === px && item.y === py && item.color !== color;
+      }
+      indexOfSquare = pieces.findIndex(checkSquare);
+
+      function checkForOwnPiece(item) {
+        return item.x === px && item.y === py && item.color === color;
+      }
+
+      indexOfOwn = pieces.findIndex(checkForOwnPiece);
+
+      if (
+        indexOfSquare !== -1 &&
+        (pieces[indexOfSquare].name.toLowerCase() === "queen" ||
+          pieces[indexOfSquare].name.toLowerCase() === "rook")
+      ) {
+        if (indexOfOwn === -1) {
+          opponent_pieces.push(pieces[indexOfSquare]);
+        }
+      } else {
+        if (!foundOwn) {
+          if (indexOfOwn > -1 && color === "white") {
+            pieces_around_white_king.push(pieces[indexOfOwn]);
+            foundOwn = true;
+          }
+          if (indexOfOwn > -1 && color === "black") {
+            pieces_around_black_king.push(pieces[indexOfOwn]);
+
+            foundOwn = true;
+          }
+        }
+      }
+    } else {
+      break;
+    }
+    px -= size;
+  }
+
+  foundOwn = false;
+  //diagonal
+  px = x + size;
+  py = y - size;
+
+  while (true) {
+    inside = FindPoint(
+      boardLength - boardLength,
+      boardLength - boardLength,
+      boardLength,
+      boardLength,
+      px,
+      py
+    );
+    if (inside) {
+      let indexOfSquare;
+      let indexOfOwn;
+      function checkSquare(item) {
+        return item.x === px && item.y === py && item.color !== color;
+      }
+      indexOfSquare = pieces.findIndex(checkSquare);
+
+      function checkForOwnPiece(item) {
+        return item.x === px && item.y === py && item.color === color;
+      }
+
+      indexOfOwn = pieces.findIndex(checkForOwnPiece);
+
+      if (
+        indexOfSquare !== -1 &&
+        (pieces[indexOfSquare].name.toLowerCase() === "queen" ||
+          pieces[indexOfSquare].name.toLowerCase() === "bishop")
+      ) {
+        if (indexOfOwn === -1) {
+          opponent_pieces.push(pieces[indexOfSquare]);
+        }
+
+        break;
+      } else {
+        if (!foundOwn) {
+          if (indexOfOwn > -1 && color === "white") {
+            pieces_around_white_king.push(pieces[indexOfOwn]);
+            foundOwn = true;
+          }
+          if (indexOfOwn > -1 && color === "black") {
+            pieces_around_black_king.push(pieces[indexOfOwn]);
+
+            foundOwn = true;
+          }
+        }
+      }
+    } else {
+      break;
+    }
+
+    px += size;
+    py -= size;
+  }
+
+  foundOwn = false;
+  //right
+
+  px = x + size;
+  py = y + size;
+  while (true) {
+    inside = FindPoint(
+      boardLength - boardLength,
+      boardLength - boardLength,
+      boardLength,
+      boardLength,
+      px,
+      py
+    );
+    if (inside) {
+      let indexOfSquare;
+      let indexOfOwn;
+
+      function checkSquare(item) {
+        return item.x === px && item.y === py && item.color !== color;
+      }
+      indexOfSquare = pieces.findIndex(checkSquare);
+
+      function checkForOwnPiece(item) {
+        return item.x === px && item.y === py && item.color === color;
+      }
+
+      indexOfOwn = pieces.findIndex(checkForOwnPiece);
+
+      if (
+        indexOfSquare !== -1 &&
+        (pieces[indexOfSquare].name.toLowerCase() === "queen" ||
+          pieces[indexOfSquare].name.toLowerCase() === "bishop")
+      ) {
+        if (indexOfOwn === -1) {
+          opponent_pieces.push(pieces[indexOfSquare]);
+        }
+
+        break;
+      } else {
+        if (!foundOwn) {
+          if (indexOfOwn > -1 && color === "white") {
+            pieces_around_white_king.push(pieces[indexOfOwn]);
+            foundOwn = true;
+          }
+          if (indexOfOwn > -1 && color === "black") {
+            pieces_around_black_king.push(pieces[indexOfOwn]);
+
+            foundOwn = true;
+          }
+        }
+      }
+    } else {
+      break;
+    }
+    px += size;
+    py += size;
+  }
+
+  foundOwn = false;
+  //bottom
+
+  px = x - size;
+  py = y + size;
+  while (true) {
+    inside = FindPoint(
+      boardLength - boardLength,
+      boardLength - boardLength,
+      boardLength,
+      boardLength,
+      px,
+      py
+    );
+    if (inside) {
+      let indexOfSquare;
+      let indexOfOwn;
+
+      function checkSquare(item) {
+        return item.x === px && item.y === py && item.color !== color;
+      }
+      indexOfSquare = pieces.findIndex(checkSquare);
+
+      function checkForOwnPiece(item) {
+        return item.x === px && item.y === py && item.color === color;
+      }
+
+      indexOfOwn = pieces.findIndex(checkForOwnPiece);
+
+      if (
+        indexOfSquare !== -1 &&
+        (pieces[indexOfSquare].name.toLowerCase() === "queen" ||
+          pieces[indexOfSquare].name.toLowerCase() === "bishop")
+      ) {
+        if (indexOfOwn === -1) {
+          opponent_pieces.push(pieces[indexOfSquare]);
+        }
+
+        break;
+      } else {
+        if (!foundOwn) {
+          if (indexOfOwn > -1 && color === "white") {
+            pieces_around_white_king.push(pieces[indexOfOwn]);
+            foundOwn = true;
+          }
+          if (indexOfOwn > -1 && color === "black") {
+            pieces_around_black_king.push(pieces[indexOfOwn]);
+
+            foundOwn = true;
+          }
+        }
+      }
+    } else {
+      break;
+    }
+    px -= size;
+    py += size;
+  }
+
+  foundOwn = false;
+  //left
+
+  px = x - size;
+  py = y - size;
+  while (true) {
+    inside = FindPoint(
+      boardLength - boardLength,
+      boardLength - boardLength,
+      boardLength,
+      boardLength,
+      px,
+      py
+    );
+    if (inside) {
+      let indexOfSquare;
+      let indexOfOwn;
+
+      function checkSquare(item) {
+        return item.x === px && item.y === py && item.color !== color;
+      }
+      indexOfSquare = pieces.findIndex(checkSquare);
+
+      function checkForOwnPiece(item) {
+        return item.x === px && item.y === py && item.color === color;
+      }
+
+      indexOfOwn = pieces.findIndex(checkForOwnPiece);
+
+      if (
+        indexOfSquare !== -1 &&
+        (pieces[indexOfSquare].name.toLowerCase() === "queen" ||
+          pieces[indexOfSquare].name.toLowerCase() === "bishop")
+      ) {
+        if (indexOfOwn === -1) {
+          opponent_pieces.push(pieces[indexOfSquare]);
+        }
+
+        break;
+      } else {
+        if (!foundOwn) {
+          if (indexOfOwn > -1 && color === "white") {
+            pieces_around_white_king.push(pieces[indexOfOwn]);
+            foundOwn = true;
+          }
+          if (indexOfOwn > -1 && color === "black") {
+            pieces_around_black_king.push(pieces[indexOfOwn]);
+
+            foundOwn = true;
+          }
+        }
+      }
+    } else {
+      break;
+    }
+    px -= size;
+    py -= size;
+  }
+
+  if (color === "white") {
+    opponent_pieces_around_white_king = opponent_pieces;
+    console.log("around WHITEKING", pieces_around_white_king);
+  }
+  if (color === "black") {
+    opponent_pieces_around_black_king = opponent_pieces;
+    console.log("around BlackKING", pieces_around_black_king);
+  }
+}
+
+function getPiecesProtectingKings() {
+  pieces_protecting_white_king = [];
+  pieces_protecting_black_king = [];
+
+  opponent_pieces_around_white_king.forEach((p) => {
+    if (p.color === "black") {
+      p.legalMoves.forEach((move) => {
+        function checkForPiece(item) {
+          return item.x === move.x && item.y === move.y;
+        }
+
+        let indexOfPiece = pieces_around_white_king.findIndex(checkForPiece);
+
+        if (indexOfPiece !== -1) {
+          pieces_protecting_white_king.push(
+            pieces_around_white_king[indexOfPiece]
+          );
+        }
+      });
     }
   });
- }
 
-function acceptDraw(){
-  gameState.drawRequested=false
-  gameState.over = true
-  gameState.message=`draw! ${gameState.players["white"]} by mutual agreement `
-
-}
-function denyDraw(){
-  gameState.drawRequested = false
-
-}
-function checkThreeFoldRepetition(newFEN){
-  let count=0
-  for(let FEN of threefold_repetition){
-    if(newFEN === FEN){
-      count ++
-    }
-  }
-  if(count === 2){
-    gameState.over= true
-    gameState.message=`draw! by threefold repetition `
-  }else{
-
-    let current ;
-    let next ;
-    for(let i = 0;i < threefold_repetition.length;i++){
-      
-      if(i === 0){
-         current = newFEN
-       next =threefold_repetition[i]
-        
-      }
-      else if(i < threefold_repetition.length - 1){
-         current = next
-         next = threefold_repetition[i]
-      }
-      else{
-        
-        current = next
-      }
-      threefold_repetition[i]= current
-    }
-  }
-
-}
-function openCheck(){
-  getPiecesAroundKings(whiteKing.x,whiteKing.y,whiteKing.color,whiteKing.size)
-  
-  getPiecesAroundKings(blackKing.x,blackKing.y,blackKing.color,blackKing.size)
-  
-  getPiecesProtectingKings()
-}
-
-function getPiecesAroundKings(x,y,color,size){
-
-  
-  if(color ==="white"){
-    pieces_around_white_king=[]
-    opponent_pieces_around_white_king=[]
-  }
-  if(color==="black"){
-    pieces_around_black_king=[]
-    opponent_pieces_around_black_king=[]
-  }
-  
-    let px = x;
-    let py = y;
-    let inside = true;
-    //top
-    let foundOwn = false
-  let opponent_pieces =[]
-    py = y - size;
-    while (true) {
-      inside = FindPoint(
-        boardLength - boardLength,
-        boardLength - boardLength,
-        boardLength,
-        boardLength,
-        px,
-        py
-      );
-      if (inside) {
-        let indexOfSquare;
-        let indexOfOwn;
-        function checkSquare(item) {
-          return item.x === px && item.y === py && item.color !== color;
-        }
-        indexOfSquare = pieces.findIndex(checkSquare);
-
-        function checkForOwnPiece(item) {
-          return item.x === px && item.y === py && item.color === color;
-        }
-
-        indexOfOwn = pieces.findIndex(checkForOwnPiece);
-
-        if (indexOfSquare !== -1 && (pieces[indexOfSquare].name.toLowerCase() ==="queen" || pieces[indexOfSquare].name.toLowerCase() ==="rook" )) {
-          if(indexOfOwn === -1 ){
-
-            opponent_pieces.push(pieces[indexOfSquare])
-          }
-          
-          
-
-          break;
-        } else {
-          
-            if(!foundOwn){
-              if(indexOfOwn > -1 && color === "white"){
-            pieces_around_white_king.push(pieces[indexOfOwn])
-          foundOwn = true
-          }
-          if(indexOfOwn > -1 && color === "black"){
-            
-            pieces_around_black_king.push(pieces[indexOfOwn])
-          
-          foundOwn = true}
-
-            }
-          
-        }
-      } else {
-        break;
-      }
-      py -= size;
-    }
-   
-    
-    foundOwn = false
-    //right
-
-    px = x + size;
-    py = y;
-    while (true) {
-      inside = FindPoint(
-        boardLength - boardLength,
-        boardLength - boardLength,
-        boardLength,
-        boardLength,
-        px,
-        py
-      );
-      if (inside) {
-        let indexOfSquare;
-        let indexOfOwn;
-
-        function checkSquare(item) {
-          return item.x === px && item.y === py && item.color !== color;
-        }
-        indexOfSquare = pieces.findIndex(checkSquare);
-
-        function checkForOwnPiece(item) {
-          return item.x === px && item.y === py && item.color === color;
-        }
-
-        indexOfOwn = pieces.findIndex(checkForOwnPiece);
-
-        if (indexOfSquare !== -1 && (pieces[indexOfSquare].name.toLowerCase() ==="queen" || pieces[indexOfSquare].name.toLowerCase() ==="rook")) {
-          if(indexOfOwn === -1 ){
-            
-            opponent_pieces.push(pieces[indexOfSquare])
-          }
-          
-
-          break;
-        } else {
-          
-            if(!foundOwn){
-              if(indexOfOwn > -1 && color === "white"){
-            pieces_around_white_king.push(pieces[indexOfOwn])
-          foundOwn = true
-          }
-          if(indexOfOwn > -1 && color === "black"){
-            
-            pieces_around_black_king.push(pieces[indexOfOwn])
-          
-          foundOwn = true}
-
-            }
-          
-        }
-      } else {
-        break;
-      }
-      px += size;
-    }
-   
-    
-    foundOwn = false
-    //bottom
-
-    px = x;
-    py = y + size;
-    while (true) {
-      inside = FindPoint(
-        boardLength - boardLength,
-        boardLength - boardLength,
-        boardLength,
-        boardLength,
-        px,
-        py
-      );
-      if (inside) {
-        let indexOfSquare;
-        let indexOfOwn;
-
-        function checkSquare(item) {
-          return item.x === px && item.y === py && item.color !== color;
-        }
-        indexOfSquare = pieces.findIndex(checkSquare);
-
-        function checkForOwnPiece(item) {
-          return item.x === px && item.y === py && item.color === color;
-        }
-
-        indexOfOwn = pieces.findIndex(checkForOwnPiece);
-
-        if (indexOfSquare !== -1 && (pieces[indexOfSquare].name.toLowerCase() ==="queen" || pieces[indexOfSquare].name.toLowerCase() ==="rook")) {
-          if(indexOfOwn === -1 ){
-            
-            opponent_pieces.push(pieces[indexOfSquare])
-          }
-          
-
-          break;
-        } else {
-          
-            if(!foundOwn){
-              if(indexOfOwn > -1 && color === "white"){
-            pieces_around_white_king.push(pieces[indexOfOwn])
-          foundOwn = true
-          }
-          if(indexOfOwn > -1 && color === "black"){
-            
-            pieces_around_black_king.push(pieces[indexOfOwn])
-          
-          foundOwn = true}
-
-            }
-          
-        }
-      } else {
-        break;
-      }
-      py += size;
-    }
-   
-    
-    foundOwn = false
-    //left
-
-    px = x - size;
-    py = y;
-    while (true) {
-      inside = FindPoint(
-        boardLength - boardLength,
-        boardLength - boardLength,
-        boardLength,
-        boardLength,
-        px,
-        py
-      );
-      if (inside) {
-        let indexOfSquare;
-        let indexOfOwn;
-
-        function checkSquare(item) {
-          return item.x === px && item.y === py && item.color !== color;
-        }
-        indexOfSquare = pieces.findIndex(checkSquare);
-
-        function checkForOwnPiece(item) {
-          return item.x === px && item.y === py && item.color === color;
-        }
-
-        indexOfOwn = pieces.findIndex(checkForOwnPiece);
-
-        if (indexOfSquare !== -1 && (pieces[indexOfSquare].name.toLowerCase() ==="queen" || pieces[indexOfSquare].name.toLowerCase() ==="rook")) {
-          if(indexOfOwn === -1 ){
-            
-            opponent_pieces.push(pieces[indexOfSquare])
-          }
-          
-        } else {
-          
-            if(!foundOwn){
-              if(indexOfOwn > -1 && color === "white"){
-            pieces_around_white_king.push(pieces[indexOfOwn])
-          foundOwn = true
-          }
-          if(indexOfOwn > -1 && color === "black"){
-            
-            pieces_around_black_king.push(pieces[indexOfOwn])
-          
-          foundOwn = true}
-
-            }
-          
-        }
-      } else {
-        break;
-      }
-      px -= size;
-    }
-
-   
-    
-    foundOwn = false
-    //diagonal
-    px = x + size;
-    py = y - size;
-
-    while (true) {
-      inside = FindPoint(
-        boardLength - boardLength,
-        boardLength - boardLength,
-        boardLength,
-        boardLength,
-        px,
-        py
-      );
-      if (inside) {
-        let indexOfSquare;
-        let indexOfOwn;
-        function checkSquare(item) {
-          return item.x === px && item.y === py && item.color !== color;
-        }
-        indexOfSquare = pieces.findIndex(checkSquare);
-
-        function checkForOwnPiece(item) {
-          return item.x === px && item.y === py && item.color === color;
-        }
-
-        indexOfOwn = pieces.findIndex(checkForOwnPiece);
-
-        if (indexOfSquare !== -1 && (pieces[indexOfSquare].name.toLowerCase() ==="queen" || pieces[indexOfSquare].name.toLowerCase() ==="bishop")) {
-          if(indexOfOwn === -1 ){
-            
-            opponent_pieces.push(pieces[indexOfSquare])
-          }
-          
-          break;
-        } else {
-          
-            if(!foundOwn){
-              if(indexOfOwn > -1 && color === "white"){
-            pieces_around_white_king.push(pieces[indexOfOwn])
-          foundOwn = true
-          }
-          if(indexOfOwn > -1 && color === "black"){
-            
-            pieces_around_black_king.push(pieces[indexOfOwn])
-          
-          foundOwn = true}
-
-            }
-          
-        }
-      } else {
-        break;
-      }
-
-      px += size;
-      py -= size;
-    }
-   
-    
-    foundOwn = false
-    //right
-
-    px = x + size;
-    py = y + size;
-    while (true) {
-      inside = FindPoint(
-        boardLength - boardLength,
-        boardLength - boardLength,
-        boardLength,
-        boardLength,
-        px,
-        py
-      );
-      if (inside) {
-        let indexOfSquare;
-        let indexOfOwn;
-
-        function checkSquare(item) {
-          return item.x === px && item.y === py && item.color !== color;
-        }
-        indexOfSquare = pieces.findIndex(checkSquare);
-
-        function checkForOwnPiece(item) {
-          return item.x === px && item.y === py && item.color === color;
-        }
-
-        indexOfOwn = pieces.findIndex(checkForOwnPiece);
-
-        if (indexOfSquare !== -1 && (pieces[indexOfSquare].name.toLowerCase() ==="queen" || pieces[indexOfSquare].name.toLowerCase() ==="bishop")) {
-           if(indexOfOwn === -1 ){
-            
-            opponent_pieces.push(pieces[indexOfSquare])
-          }
-          
-          break
-        } else {
-          
-            if(!foundOwn){
-              if(indexOfOwn > -1 && color === "white"){
-            pieces_around_white_king.push(pieces[indexOfOwn])
-          foundOwn = true
-          }
-          if(indexOfOwn > -1 && color === "black"){
-            
-            pieces_around_black_king.push(pieces[indexOfOwn])
-          
-          foundOwn = true}
-
-            }
-          
-        }
-      } else {
-        break;
-      }
-      px += size;
-      py += size;
-    }
-   
-    
-    foundOwn = false
-    //bottom
-
-    px = x - size;
-    py = y + size;
-    while (true) {
-      inside = FindPoint(
-        boardLength - boardLength,
-        boardLength - boardLength,
-        boardLength,
-        boardLength,
-        px,
-        py
-      );
-      if (inside) {
-        let indexOfSquare;
-        let indexOfOwn;
-
-        function checkSquare(item) {
-          return item.x === px && item.y === py && item.color !== color;
-        }
-        indexOfSquare = pieces.findIndex(checkSquare);
-
-        function checkForOwnPiece(item) {
-          return item.x === px && item.y === py && item.color === color;
-        }
-
-        indexOfOwn = pieces.findIndex(checkForOwnPiece);
-
-        if (indexOfSquare !== -1 && (pieces[indexOfSquare].name.toLowerCase() ==="queen" || pieces[indexOfSquare].name.toLowerCase() ==="bishop")) {
-           if(indexOfOwn === -1 ){
-            
-            opponent_pieces.push(pieces[indexOfSquare])
-          }
-          
-          break
-        } else {
-          
-            if(!foundOwn){
-              if(indexOfOwn > -1 && color === "white"){
-            pieces_around_white_king.push(pieces[indexOfOwn])
-          foundOwn = true
-          }
-          if(indexOfOwn > -1 && color === "black"){
-            
-            pieces_around_black_king.push(pieces[indexOfOwn])
-          
-          foundOwn = true}
-
-            }
-          
-          
-        }
-      } else {
-        break;
-      }
-      px -= size;
-      py += size;
-    }
-   
-    
-    foundOwn = false
-    //left
-
-    px = x - size;
-    py = y - size;
-    while (true) {
-      inside = FindPoint(
-        boardLength - boardLength,
-        boardLength - boardLength,
-        boardLength,
-        boardLength,
-        px,
-        py
-      );
-      if (inside) {
-        let indexOfSquare;
-        let indexOfOwn;
-
-        function checkSquare(item) {
-          return item.x === px && item.y === py && item.color !== color;
-        }
-        indexOfSquare = pieces.findIndex(checkSquare);
-
-        function checkForOwnPiece(item) {
-          return item.x === px && item.y === py && item.color === color;
-        }
-
-        indexOfOwn = pieces.findIndex(checkForOwnPiece);
-
-        if (indexOfSquare !== -1 && (pieces[indexOfSquare].name.toLowerCase() ==="queen" || pieces[indexOfSquare].name.toLowerCase() ==="bishop")) {
-           if(indexOfOwn === -1 ){
-            
-            opponent_pieces.push(pieces[indexOfSquare])
-          }
-          
-          break
-        } else {
-          
-            if(!foundOwn){
-              if(indexOfOwn > -1 && color === "white"){
-            pieces_around_white_king.push(pieces[indexOfOwn])
-          foundOwn = true
-          }
-          if(indexOfOwn > -1 && color === "black"){
-            
-            pieces_around_black_king.push(pieces[indexOfOwn])
-          
-          foundOwn = true}
-
-            }
-          
-          
-        }
-      } else {
-        break;
-      }
-      px -= size;
-      py -= size;
-    }
-   
-   if(color ==="white"){
-    opponent_pieces_around_white_king=opponent_pieces
-    console.log("around WHITEKING",pieces_around_white_king)
-  }
-  if(color==="black"){
-    opponent_pieces_around_black_king=opponent_pieces
-    console.log("around BlackKING",pieces_around_black_king)
-  }
-}
-
-
-function getPiecesProtectingKings(){
-  pieces_protecting_white_king=[]
-  pieces_protecting_black_king=[]
- 
-  opponent_pieces_around_white_king.forEach(p=>{
-    
-    if(p.color ==="black" ){
-      p.legalMoves.forEach(move=>{
+  opponent_pieces_around_black_king.forEach((p) => {
+    if (p.color === "white") {
+      p.legalMoves.forEach((move) => {
         function checkForPiece(item) {
           return item.x === move.x && item.y === move.y;
         }
-        
-        let indexOfPiece  = pieces_around_white_king.findIndex(checkForPiece)
 
-        if(indexOfPiece !== -1){
-          pieces_protecting_white_king.push(pieces_around_white_king[indexOfPiece])
+        let indexOfPiece = pieces_around_black_king.findIndex(checkForPiece);
+
+        if (indexOfPiece !== -1) {
+          pieces_protecting_black_king.push(
+            pieces_around_black_king[indexOfPiece]
+          );
         }
-      })
+      });
     }
-
-  })
-
-  opponent_pieces_around_black_king.forEach(p=>{
-   
-    if(p.color ==="white" ){
-      p.legalMoves.forEach(move=>{
-        function checkForPiece(item) {
-          return item.x === move.x && item.y === move.y;
-        }
-        
-        let indexOfPiece  = pieces_around_black_king.findIndex(checkForPiece)
-
-        if(indexOfPiece !== -1){
-          pieces_protecting_black_king.push(pieces_around_black_king[indexOfPiece])
-        }
-      })
-    }
-  })
+  });
 }
 function getKingStatus() {
   gettingKingCheckedStatus = true;
-  
+
   allPossibleMovesToConsiderForChecking = [];
   allPossibleMovesBlack = [];
   allPossibleMovesWhite = [];
-  let collectsWhite=[]
-  let collectsBlack=[]
-  
-  piecesDefended=[]
+  let collectsWhite = [];
+  let collectsBlack = [];
+
+  piecesDefended = [];
   for (let p of pieces) {
     allPossibleMovesToConsiderForChecking = [];
     if (p.color === "black") {
       p.getPossibleMoves();
-      
-      isCheckingKing= false
+
+      isCheckingKing = false;
       if (allPossibleMovesToConsiderForChecking.length > 0) {
         allPossibleMovesToConsiderForChecking.forEach((move) => {
-          if(move.x === whiteKing.x && move.y === whiteKing.y){
-            
-            isCheckingKing= true
-            collectsWhite.push(p)
-            console.log("AAAAAAAAAAAAAAAA",p)
+          if (move.x === whiteKing.x && move.y === whiteKing.y) {
+            isCheckingKing = true;
+            collectsWhite.push(p);
+            console.log("AAAAAAAAAAAAAAAA", p);
           }
           allPossibleMovesBlack.push(move);
         });
       }
 
-      if(!isCheckingKing){
-        
+      if (!isCheckingKing) {
         function checkForPiece(item) {
           return item.x === p.x && item.y === p.y;
         }
         let indexOfPiece = pieces_checking_white_king.findIndex(checkForPiece);
-        pieces_checking_white_king.splice(indexOfPiece,1)
+        pieces_checking_white_king.splice(indexOfPiece, 1);
       }
     }
 
-  
-
     if (p.color === "white") {
-      
-    allPossibleMovesToConsiderForChecking = [];
+      allPossibleMovesToConsiderForChecking = [];
       p.getPossibleMoves();
-      let isCheckingKing= false
+      let isCheckingKing = false;
       if (allPossibleMovesToConsiderForChecking.length > 0) {
         allPossibleMovesToConsiderForChecking.forEach((move) => {
-          if(move.x === blackKing.x && move.y === blackKing.y){
-            
-            isCheckingKing= true
-            collectsBlack.push(p)
-            
-            console.log("AAAAAAAAAAAAAAAA",p)
+          if (move.x === blackKing.x && move.y === blackKing.y) {
+            isCheckingKing = true;
+            collectsBlack.push(p);
+
+            console.log("AAAAAAAAAAAAAAAA", p);
           }
           allPossibleMovesWhite.push(move);
         });
       }
-      if(!isCheckingKing){
-        
+      if (!isCheckingKing) {
         function checkForPiece(item) {
           return item.x === p.x && item.y === p.y;
         }
         let indexOfPiece = pieces_checking_black_king.findIndex(checkForPiece);
-        pieces_checking_black_king.splice(indexOfPiece,1)
+        pieces_checking_black_king.splice(indexOfPiece, 1);
       }
     }
   }
-collectsWhite.forEach(item=>{
-  pieces_checking_white_king.push(item)
-})
-  
-  collectsBlack.forEach(item=>{
-    pieces_checking_black_king.push(item)
-  })
-    
+  collectsWhite.forEach((item) => {
+    pieces_checking_white_king.push(item);
+  });
+
+  collectsBlack.forEach((item) => {
+    pieces_checking_black_king.push(item);
+  });
+
   function checkForWhiteKingSquare(item) {
     return item.x === whiteKing.x && item.y === whiteKing.y;
   }
   function checkForBlackKingSquare(item) {
     return item.x === blackKing.x && item.y === blackKing.y;
   }
-  
-  let indexOfWhiteKing = allPossibleMovesBlack.findIndex(checkForWhiteKingSquare);
-  let indexOfBlackKing = allPossibleMovesWhite.findIndex(checkForBlackKingSquare);
-  
-  if(indexOfWhiteKing !== -1){
 
-    whiteKingChecked = true
-    console.log("WHITE CHECKED!!!!!!!!!!!!!!1")
-  }
-  else{
-    whiteKingChecked=false
-  }
-  if(indexOfBlackKing !== -1){
+  let indexOfWhiteKing = allPossibleMovesBlack.findIndex(
+    checkForWhiteKingSquare
+  );
+  let indexOfBlackKing = allPossibleMovesWhite.findIndex(
+    checkForBlackKingSquare
+  );
 
-    blackKingChecked = true
-    console.log("BLACK CHECKED!!!!!!!!!!!!!!1")
+  if (indexOfWhiteKing !== -1) {
+    whiteKingChecked = true;
+    console.log("WHITE CHECKED!!!!!!!!!!!!!!1");
+  } else {
+    whiteKingChecked = false;
   }
-  else{
-    blackKingChecked=false
+  if (indexOfBlackKing !== -1) {
+    blackKingChecked = true;
+    console.log("BLACK CHECKED!!!!!!!!!!!!!!1");
+  } else {
+    blackKingChecked = false;
   }
 
-  console.log("allPiecesCheckingKings!!!!!!!!!!!!!!!!!!!!!!!")
-  console.log(pieces_checking_white_king)
-  
-console.log(pieces_checking_black_king)
+  console.log("allPiecesCheckingKings!!!!!!!!!!!!!!!!!!!!!!!");
+  console.log(pieces_checking_white_king);
+
+  console.log(pieces_checking_black_king);
   allPossibleMovesToConsiderForChecking = [];
   allPossibleMovesBlack = [];
   allPossibleMovesWhite = [];
@@ -5244,310 +5272,247 @@ console.log(pieces_checking_black_king)
   gettingKingCheckedStatus = false;
 }
 
-function getMovesWhenChecked(){
+function getMovesWhenChecked() {
+  allPossibleMovesWhiteWhenChecked = [];
+  allPossibleMovesBlackWhenChecked = [];
 
-  allPossibleMovesWhiteWhenChecked=[]
-  allPossibleMovesBlackWhenChecked=[]
-  
-  piecesDefended=[]
-  
-  for(let p of pieces_checking_white_king){
+  piecesDefended = [];
 
-    allPossibleMovesWhiteWhenChecked.push({x:p.x,y:p.y})
-    p.getPossibleMoves()
-    getPossibleMovesOfPiece(p)
-
+  for (let p of pieces_checking_white_king) {
+    allPossibleMovesWhiteWhenChecked.push({ x: p.x, y: p.y });
+    p.getPossibleMoves();
+    getPossibleMovesOfPiece(p);
   }
 
- if(pieces_checking_white_king.length > 0){
-  let movesToCheckWhiteKing = whiteKing.legalMoves.slice(1)
-  movesToCheckWhiteKing.forEach(move=>{
-    function checkForForbiddenSquare(item) {
-      return item.x === move.x && item.y === move.y;
-    }
-    let forbidden = forbiddenWhiteKingMoves.findIndex(checkForForbiddenSquare)
-    if(forbidden === -1){
-      
-      allPossibleMovesWhiteWhenChecked.push(
-        {x:move.x ,y:move.y}
-      )
-    }
-    
-  })
- }
-
-  for(let p of pieces_checking_black_king){
-
-    
-    allPossibleMovesBlackWhenChecked.push({x:p.x,y:p.y})
-    p.getPossibleMoves()
-    
-    getPossibleMovesOfPiece(p)
-
-   
-  }
-  
- if(pieces_checking_black_king.length > 0){
-  let movesToCheckBlackKing = blackKing.legalMoves.slice(1)
-  movesToCheckBlackKing.forEach(move=>{
-    function checkForForbiddenSquare(item) {
-      return item.x === move.x && item.y === move.y;
-    }
-    let forbidden = forbiddenBlackKingMoves.findIndex(checkForForbiddenSquare)
-    if(forbidden === -1){
-      
-    allPossibleMovesBlackWhenChecked.push(
-      {x:move.x ,y:move.y}
-    )
-    }
-  })
-}
-  console.log("allPossibleMovesWhenChecked!!!!!!!!!!!!!!!!!!!!!!!")
-  console.log(allPossibleMovesWhiteWhenChecked)
-    
-  console.log(allPossibleMovesBlackWhenChecked)
-}
-function getGameStatus(){
-
-  piecesDefended=[]
-  if(blackKingChecked || whiteKingChecked){
-      for(let p of pieces){
-        if(p.name.toLowerCase() !== "king"){
-            
-        p.getPossibleMoves()
-        }
+  if (pieces_checking_white_king.length > 0) {
+    let movesToCheckWhiteKing = whiteKing.legalMoves.slice(1);
+    movesToCheckWhiteKing.forEach((move) => {
+      function checkForForbiddenSquare(item) {
+        return item.x === move.x && item.y === move.y;
       }
-    if(whiteKingChecked){
-      
-      let whiteMoves=0
-      for(let p of pieces){
-        
-        if(p.color === "white" && p.name.toLowerCase() !== "king"){
-          let movesTocheck = p.legalMoves.slice(1)
-          movesTocheck.forEach(move=>{
+      let forbidden = forbiddenWhiteKingMoves.findIndex(
+        checkForForbiddenSquare
+      );
+      if (forbidden === -1) {
+        allPossibleMovesWhiteWhenChecked.push({ x: move.x, y: move.y });
+      }
+    });
+  }
+
+  for (let p of pieces_checking_black_king) {
+    allPossibleMovesBlackWhenChecked.push({ x: p.x, y: p.y });
+    p.getPossibleMoves();
+
+    getPossibleMovesOfPiece(p);
+  }
+
+  if (pieces_checking_black_king.length > 0) {
+    let movesToCheckBlackKing = blackKing.legalMoves.slice(1);
+    movesToCheckBlackKing.forEach((move) => {
+      function checkForForbiddenSquare(item) {
+        return item.x === move.x && item.y === move.y;
+      }
+      let forbidden = forbiddenBlackKingMoves.findIndex(
+        checkForForbiddenSquare
+      );
+      if (forbidden === -1) {
+        allPossibleMovesBlackWhenChecked.push({ x: move.x, y: move.y });
+      }
+    });
+  }
+  console.log("allPossibleMovesWhenChecked!!!!!!!!!!!!!!!!!!!!!!!");
+  console.log(allPossibleMovesWhiteWhenChecked);
+
+  console.log(allPossibleMovesBlackWhenChecked);
+}
+function getGameStatus() {
+  piecesDefended = [];
+  if (blackKingChecked || whiteKingChecked) {
+    for (let p of pieces) {
+      if (p.name.toLowerCase() !== "king") {
+        p.getPossibleMoves();
+      }
+    }
+    if (whiteKingChecked) {
+      let whiteMoves = 0;
+      for (let p of pieces) {
+        if (p.color === "white" && p.name.toLowerCase() !== "king") {
+          let movesTocheck = p.legalMoves.slice(1);
+          movesTocheck.forEach((move) => {
             function checkSquare(item) {
-              return (
-                item.x === move.x &&
-                item.y === move.y
-              );
+              return item.x === move.x && item.y === move.y;
             }
 
-            let indexOfMove = allPossibleMovesWhiteWhenChecked.findIndex(checkSquare)
+            let indexOfMove =
+              allPossibleMovesWhiteWhenChecked.findIndex(checkSquare);
 
-            if(indexOfMove !== -1){
-              whiteMoves ++
+            if (indexOfMove !== -1) {
+              whiteMoves++;
             }
-
-
-          })
+          });
         }
       }
-      let whiteKingMoves = whiteKing.legalMoves.slice(1)
-      whiteKingMoves.forEach(move=>{
+      let whiteKingMoves = whiteKing.legalMoves.slice(1);
+      whiteKingMoves.forEach((move) => {
         function checkSquare(item) {
-          return (
-            item.x === move.x &&
-            item.y === move.y
-          );
+          return item.x === move.x && item.y === move.y;
         }
 
-        let indexOfMove = pieces_checking_white_king.findIndex(checkSquare)
+        let indexOfMove = pieces_checking_white_king.findIndex(checkSquare);
 
-        if(indexOfMove !== -1){
-          whiteMoves ++
+        if (indexOfMove !== -1) {
+          whiteMoves++;
         }
-      })
+      });
 
-      if(whiteMoves === 0){
-        
-        gameState.over = true
-        gameState.message=`check mate! ${gameState.players["black"]} wins`
-        
+      if (whiteMoves === 0) {
+        gameState.over = true;
+        gameState.message = `check mate! ${gameState.players["black"]} wins`;
       }
     }
-    if(blackKingChecked){
-        
-      let blackMoves=0
-      for(let p of pieces){
-        
-        if(p.color === "black" && p.name.toLowerCase() !== "king"){
-          let movesTocheck = p.legalMoves.slice(1)
-          movesTocheck.forEach(move=>{
+    if (blackKingChecked) {
+      let blackMoves = 0;
+      for (let p of pieces) {
+        if (p.color === "black" && p.name.toLowerCase() !== "king") {
+          let movesTocheck = p.legalMoves.slice(1);
+          movesTocheck.forEach((move) => {
             function checkSquare(item) {
-              return (
-                item.x === move.x &&
-                item.y === move.y
-              );
+              return item.x === move.x && item.y === move.y;
             }
 
-            let indexOfMove = allPossibleMovesBlackWhenChecked.findIndex(checkSquare)
+            let indexOfMove =
+              allPossibleMovesBlackWhenChecked.findIndex(checkSquare);
 
-            if(indexOfMove !== -1){
-              blackMoves ++
+            if (indexOfMove !== -1) {
+              blackMoves++;
             }
-
-
-          })
+          });
         }
       }
-      let blackKingMoves = blackKing.legalMoves.slice(1)
-      blackKingMoves.forEach(move=>{
+      let blackKingMoves = blackKing.legalMoves.slice(1);
+      blackKingMoves.forEach((move) => {
         function checkSquare(item) {
-          return (
-            item.x === move.x &&
-            item.y === move.y
-          );
+          return item.x === move.x && item.y === move.y;
         }
 
-        let indexOfMove = pieces_checking_black_king.findIndex(checkSquare)
+        let indexOfMove = pieces_checking_black_king.findIndex(checkSquare);
 
-        if(indexOfMove !== -1){
-          blackMoves ++
+        if (indexOfMove !== -1) {
+          blackMoves++;
         }
-      })
+      });
 
-      if(blackMoves === 0){
-        
-        gameState.over = true
-        gameState.message=`check mate! ${gameState.players["white"]} wins`
+      if (blackMoves === 0) {
+        gameState.over = true;
+        gameState.message = `check mate! ${gameState.players["white"]} wins`;
       }
     }
+  } else {
+    checkStaleMate();
+    checkFiftyMoveRule();
   }
-  else{
-    checkStaleMate()
-    checkFiftyMoveRule()
-  }
-
 }
 
-function trimKingMoves(){
-  let whiteKingValidMoves=[]
-  
-  let blackKingValidMoves=[]
-  
-  let whitePieces=[]
-  
-  let blackPieces=[]
-  
-  possibleMoves=[]
-  piecesDefended=[]
-  trimingKingMoves=true
-  whiteKing.getPossibleMoves()
-  blackKing.getPossibleMoves()
-  trimingKingMoves=false
+function trimKingMoves() {
+  let whiteKingValidMoves = [];
 
-  for(let p of pieces){
-    if(p.color==="white" && p.name.toLowerCase !=="king"){
-     
-      whitePieces.push(p)
-      
-    p.getPossibleMoves()
+  let blackKingValidMoves = [];
+
+  let whitePieces = [];
+
+  let blackPieces = [];
+
+  possibleMoves = [];
+  piecesDefended = [];
+  trimingKingMoves = true;
+  whiteKing.getPossibleMoves();
+  blackKing.getPossibleMoves();
+  trimingKingMoves = false;
+
+  for (let p of pieces) {
+    if (p.color === "white" && p.name.toLowerCase !== "king") {
+      whitePieces.push(p);
+
+      p.getPossibleMoves();
     }
-    if(p.color==="black" && p.name.toLowerCase !=="king"){
-      
-      blackPieces.push(p)
-      
-    p.getPossibleMoves()
+    if (p.color === "black" && p.name.toLowerCase !== "king") {
+      blackPieces.push(p);
+
+      p.getPossibleMoves();
     }
   }
-  console.log("DEFENDED",piecesDefended)
-whiteKing.legalMoves.forEach(move => {
+  console.log("DEFENDED", piecesDefended);
+  whiteKing.legalMoves.forEach((move) => {
+    let x = move.x;
+    let y = move.y;
+    if (x === whiteKing.x && y === whiteKing.y) {
+      whiteKingValidMoves.push(move);
+    } else {
+      let counter = 0;
+      for (let p of blackPieces) {
+        p.getPossibleMoves();
 
-  let x = move.x
-  let y = move.y
-  if(x === whiteKing.x && y === whiteKing.y){
-    whiteKingValidMoves.push(move)
-  }
-  else{
-    
-  let counter=0
-  for (let p of blackPieces){
-      
-    p.getPossibleMoves()
-    
-
-    possibleMoves=[]
+        possibleMoves = [];
         function checkPiece(item) {
-          return (
-            item.x === x &&
-            item.y === y
-          );
+          return item.x === x && item.y === y;
         }
-        let movesTocheck = p.legalMoves.slice(1)
+        let movesTocheck = p.legalMoves.slice(1);
         let indexOfMove = movesTocheck.findIndex(checkPiece);
-        
+
         let indexOfGuardedMove = piecesDefended.findIndex(checkPiece);
-        
-        if(indexOfMove !== -1 || indexOfGuardedMove !== -1){
-          counter ++
+
+        if (indexOfMove !== -1 || indexOfGuardedMove !== -1) {
+          counter++;
         }
-    
+      }
+      if (counter === 0) {
+        whiteKingValidMoves.push(move);
+      }
+    }
+  });
 
-  }
-  if(counter === 0){
-      whiteKingValidMoves.push(move)
-  }
+  blackKing.legalMoves.forEach((move) => {
+    let x = move.x;
+    let y = move.y;
+    if (x === blackKing.x && y === blackKing.y) {
+      blackKingValidMoves.push(move);
+    } else {
+      let counter = 0;
+      for (let p of whitePieces) {
+        p.getPossibleMoves();
 
-  }
-
-
-})
-
-blackKing.legalMoves.forEach(move => {
-
-  let x = move.x
-  let y = move.y
-  if(x === blackKing.x && y === blackKing.y){
-    blackKingValidMoves.push(move)
-  }
-  else{
-    
-  let counter=0
-  for (let p of whitePieces){
-          
-          p.getPossibleMoves()
-          
-      
-possibleMoves=[]
+        possibleMoves = [];
         function checkPiece(item) {
-          return (
-            item.x === x &&
-            item.y === y
-          );
+          return item.x === x && item.y === y;
         }
-        let movesTocheck = p.legalMoves.slice(1)
+        let movesTocheck = p.legalMoves.slice(1);
         let indexOfMove = movesTocheck.findIndex(checkPiece);
-        
+
         let indexOfGuardedMove = piecesDefended.findIndex(checkPiece);
-        
-        if(indexOfMove !== -1 || indexOfGuardedMove !== -1){
-          counter ++
+
+        if (indexOfMove !== -1 || indexOfGuardedMove !== -1) {
+          counter++;
         }
-    
+      }
+      if (counter === 0) {
+        blackKingValidMoves.push(move);
+      }
+    }
+  });
 
-  }
-  if(counter === 0){
-      blackKingValidMoves.push(move)
-  }
+  whiteKing.changeMoves(whiteKingValidMoves);
+  console.log("validWhiteKing", whiteKingValidMoves);
+  blackKing.changeMoves(blackKingValidMoves);
+  console.log("validBlackKing", blackKingValidMoves);
 
-  }
-
-
-})
-
-whiteKing.changeMoves(whiteKingValidMoves)
-console.log("validWhiteKing",whiteKingValidMoves)
-blackKing.changeMoves(blackKingValidMoves)
-console.log("validBlackKing",blackKingValidMoves)
-
-trimingKingMoves=false
-possibleMoves=[]
+  trimingKingMoves = false;
+  possibleMoves = [];
 }
 function getCastlingRights() {
   allPossibleMovesBlack = [];
   allPossibleMovesWhite = [];
 
-  piecesDefended=[]
+  piecesDefended = [];
   allPossibleMovesToConsiderForCastling = [];
 
   //check if squares not in check and not occupied
@@ -5791,7 +5756,7 @@ function generateFEN() {
   let y = 0;
   let width = boardLength / 8;
   piecePlacement = "";
-  
+
   for (let rank = 0; rank < 8; rank++) {
     let freeBoxes = 0;
     for (let file = 0; file < 8; file++) {
@@ -5828,1116 +5793,1116 @@ function generateFEN() {
     x = 0;
     y += width;
   }
-  piecesDefended=[]
+  piecesDefended = [];
   getCastlingRights();
-  getKingStatus()
-  getMovesWhenChecked()
-  openCheck()
-  trimKingMoves()
-  getGameStatus()
+  getKingStatus();
+  getMovesWhenChecked();
+  openCheck();
+  trimKingMoves();
+  getGameStatus();
 
-  console.log("Game",gameState)
+  console.log("Game", gameState);
   currentFEN = `${piecePlacement} ${activeColor} ${castlingRights} ${possibleEnPassantTarget} ${halfMoveClock} ${fullMoveNumber}`;
   console.log("target", currentFEN);
-  
 }
 function mouseClicked() {
-  if(gameState){
-    
-  if(!moving && !gameState.drawRequested && !gameState.over && !dialogOpen){
-    
-    let pieceX;
-    let pieceY;
-    let index = -1;
-    let occupied = false;
-    let inside = FindPoint(
-      boardLength - boardLength,
-      boardLength - boardLength,
-      boardLength,
-      boardLength,
-      mouseX,
-      mouseY
-    );
-    
-    if (inside) {
-      
-    generateFEN();
-      if (selectedBox && !moving) {
-        prevSelectedBox = selectedBox;
-      }
-      for (let i = 0; i < squares.length; i++) {
-        if (squares[i].clicked(mouseX, mouseY) ) {
-          selectedBox = squares[i];
-          pieceX = selectedBox.x;
-          pieceY = selectedBox.y;
+  if (gameState) {
+    if (!moving && !gameState.drawRequested && !gameState.over && !dialogOpen) {
+      let pieceX;
+      let pieceY;
+      let index = -1;
+      let occupied = false;
+      let inside = FindPoint(
+        boardLength - boardLength,
+        boardLength - boardLength,
+        boardLength,
+        boardLength,
+        mouseX,
+        mouseY
+      );
+
+      if (inside) {
+        generateFEN();
+        if (selectedBox && !moving) {
+          prevSelectedBox = selectedBox;
         }
-      }
-      console.log("seletedB", selectedBox);
-      if (selectedPiece) {
-        prevSelectedPiece = selectedPiece;
-      }
-      occupied = selectedBox.occupied;
-      for (let j = 0; j < pieces.length; j++) {
-        if (pieces[j].clicked(mouseX, mouseY)  && !moving) {
-          index = j;
-    
-          selectedPiece = pieces[index];
-          selctedBox = squares[index];
+        for (let i = 0; i < squares.length; i++) {
+          if (squares[i].clicked(mouseX, mouseY)) {
+            selectedBox = squares[i];
+            pieceX = selectedBox.x;
+            pieceY = selectedBox.y;
+          }
         }
-      }
-      console.log("s", selectedPiece);
-      console.log("ps", prevSelectedPiece);
-    
-      function checkIfOpenCheckPiece(item) {
-        return (
-          item.x === prevSelectedPiece.x &&
-          item.y === prevSelectedPiece.y
-        );
-      }
-      let protectingPieceIndex = 1
-      
-      console.log("alloewdWhiteopen",allMovesForWhiteOpenCheck)
-      console.log("all allowed blavkopoen",allMovesForBlackOpenCheck)
-      if(prevSelectedPiece){
-        function checkIfAllowedOpenCheckMove(item) {
+        console.log("seletedB", selectedBox);
+        if (selectedPiece) {
+          prevSelectedPiece = selectedPiece;
+        }
+        occupied = selectedBox.occupied;
+        for (let j = 0; j < pieces.length; j++) {
+          if (pieces[j].clicked(mouseX, mouseY) && !moving) {
+            index = j;
+
+            selectedPiece = pieces[index];
+            selctedBox = squares[index];
+          }
+        }
+        console.log("s", selectedPiece);
+        console.log("ps", prevSelectedPiece);
+
+        function checkIfOpenCheckPiece(item) {
           return (
-            item.x === selectedBox.x &&
-            item.y === selectedBox.y
+            item.x === prevSelectedPiece.x && item.y === prevSelectedPiece.y
           );
         }
-        
-        if(prevSelectedPiece.color ==="white"){
-        
-          let piecesBlocked=[]
-          protectingPieceIndex = pieces_protecting_white_king.findIndex(checkIfOpenCheckPiece)
-          
-          console.log("index wite", protectingPieceIndex)
-          if(protectingPieceIndex > -1){
-            let count = 0
-            for(let p of opponent_pieces_around_white_king){
-              p.legalMoves.forEach(move =>{
-                if(prevSelectedPiece.x === move.x && prevSelectedPiece.y ===move.y ){
-                  count ++
-                  piecesBlocked.push(p)
-                }
-              })
-            }
-            
-            console.log("blockedpppppppp",piecesBlocked)
-            if(count >= 1){
-              if(piecesBlocked.length === 1){
-                getPossibleNonOpenCheckMoves(piecesBlocked[0],prevSelectedPiece)
-                let allowed = allMovesForWhiteOpenCheck.findIndex(checkIfAllowedOpenCheckMove)
-                if(allowed !== -1){
-                  
-                protectingPieceIndex = -1
-                console.log("wertyuiop[")
-                }
-                else{
-                  
-              protectingPieceIndex = 1
-                }
+        let protectingPieceIndex = 1;
+
+        console.log("alloewdWhiteopen", allMovesForWhiteOpenCheck);
+        console.log("all allowed blavkopoen", allMovesForBlackOpenCheck);
+        if (prevSelectedPiece) {
+          function checkIfAllowedOpenCheckMove(item) {
+            return item.x === selectedBox.x && item.y === selectedBox.y;
+          }
+
+          if (prevSelectedPiece.color === "white") {
+            let piecesBlocked = [];
+            protectingPieceIndex = pieces_protecting_white_king.findIndex(
+              checkIfOpenCheckPiece
+            );
+
+            console.log("index wite", protectingPieceIndex);
+            if (protectingPieceIndex > -1) {
+              let count = 0;
+              for (let p of opponent_pieces_around_white_king) {
+                p.legalMoves.forEach((move) => {
+                  if (
+                    prevSelectedPiece.x === move.x &&
+                    prevSelectedPiece.y === move.y
+                  ) {
+                    count++;
+                    piecesBlocked.push(p);
+                  }
+                });
               }
-              else{
-                
-              protectingPieceIndex = 1
+
+              console.log("blockedpppppppp", piecesBlocked);
+              if (count >= 1) {
+                if (piecesBlocked.length === 1) {
+                  getPossibleNonOpenCheckMoves(
+                    piecesBlocked[0],
+                    prevSelectedPiece
+                  );
+                  let allowed = allMovesForWhiteOpenCheck.findIndex(
+                    checkIfAllowedOpenCheckMove
+                  );
+                  if (allowed !== -1) {
+                    protectingPieceIndex = -1;
+                    console.log("wertyuiop[");
+                  } else {
+                    protectingPieceIndex = 1;
+                  }
+                } else {
+                  protectingPieceIndex = 1;
+                }
+              } else {
+                protectingPieceIndex = -1;
               }
-            }
-            else{
-              
-              protectingPieceIndex = -1
             }
           }
-         }
-    
-         if(prevSelectedPiece.color ==="black"){
-           
-        let piecesBlocked=[]
-            protectingPieceIndex = pieces_protecting_black_king.findIndex(checkIfOpenCheckPiece)
-            console.log("index", protectingPieceIndex)
-            if(protectingPieceIndex > -1){
-              let count = 0
-              for(let p of opponent_pieces_around_black_king){
-                p.legalMoves.forEach(move =>{
-                  if(prevSelectedPiece.x === move.x && prevSelectedPiece.y === move.y ){
-                    count ++
-                    piecesBlocked.push(p)
+
+          if (prevSelectedPiece.color === "black") {
+            let piecesBlocked = [];
+            protectingPieceIndex = pieces_protecting_black_king.findIndex(
+              checkIfOpenCheckPiece
+            );
+            console.log("index", protectingPieceIndex);
+            if (protectingPieceIndex > -1) {
+              let count = 0;
+              for (let p of opponent_pieces_around_black_king) {
+                p.legalMoves.forEach((move) => {
+                  if (
+                    prevSelectedPiece.x === move.x &&
+                    prevSelectedPiece.y === move.y
+                  ) {
+                    count++;
+                    piecesBlocked.push(p);
                   }
-                })
+                });
               }
-              console.log("blockedpppppppp",piecesBlocked)
-              if(count >= 1){
-                
-                if(piecesBlocked.length === 1){
-                getPossibleNonOpenCheckMoves(piecesBlocked[0],prevSelectedPiece)
-                let allowed = allMovesForBlackOpenCheck.findIndex(checkIfAllowedOpenCheckMove)
-                if(allowed !== -1){
-                  
-                protectingPieceIndex = -1
-                console.log("wertyuiop[")
+              console.log("blockedpppppppp", piecesBlocked);
+              if (count >= 1) {
+                if (piecesBlocked.length === 1) {
+                  getPossibleNonOpenCheckMoves(
+                    piecesBlocked[0],
+                    prevSelectedPiece
+                  );
+                  let allowed = allMovesForBlackOpenCheck.findIndex(
+                    checkIfAllowedOpenCheckMove
+                  );
+                  if (allowed !== -1) {
+                    protectingPieceIndex = -1;
+                    console.log("wertyuiop[");
+                  } else {
+                    protectingPieceIndex = 1;
+                  }
+                } else {
+                  protectingPieceIndex = 1;
                 }
-                else{
-                  
-              protectingPieceIndex = 1
-                }
-              }
-              else{
-                
-              protectingPieceIndex = 1
-              }
-              }
-              else{
-              
-                protectingPieceIndex = -1
+              } else {
+                protectingPieceIndex = -1;
               }
             }
-            
-           }
-           
-      }
-      
-      if (
-        selectedPiece &&
-        prevSelectedPiece !== selectedPiece &&
-        selectedPiece.color.startsWith(activeColor) 
-      ) {
-        selectedPiece.getPossibleMoves();
-      }
-    console.log(protectingPieceIndex,"EWTEEEEeTz")
-      if (occupied) {
-        if (index > -1 && prevSelectedPiece !== selectedPiece) {
-          if (prevSelectedPiece !== null) {
-            if (
-              prevSelectedPiece.x !== pieces[index].x ||
-              prevSelectedPiece.y !== pieces[index].y
-            ) {
-              function checkSquare(item) {
-                return item.x === selectedBox.x && item.y === selectedBox.y;
-              }
-              let indexOfSquare =
-                prevSelectedPiece.legalMoves.findIndex(checkSquare);
-    
-              if(whiteKingChecked || blackKingChecked){
-    
-                if(whiteKingChecked && activeColor.startsWith("w") && allPossibleMovesWhiteWhenChecked.length > 0){
-                  
-                  let indexOfCheckingPiece =
-                    allPossibleMovesWhiteWhenChecked.findIndex(checkSquare);
-                    if (indexOfCheckingPiece !== -1 && indexOfSquare !== -1 && protectingPieceIndex === -1) {
+          }
+        }
+
+        if (
+          selectedPiece &&
+          prevSelectedPiece !== selectedPiece &&
+          selectedPiece.color.startsWith(activeColor)
+        ) {
+          selectedPiece.getPossibleMoves();
+        }
+        console.log(protectingPieceIndex, "EWTEEEEeTz");
+        if (occupied) {
+          if (index > -1 && prevSelectedPiece !== selectedPiece) {
+            if (prevSelectedPiece !== null) {
+              if (
+                prevSelectedPiece.x !== pieces[index].x ||
+                prevSelectedPiece.y !== pieces[index].y
+              ) {
+                function checkSquare(item) {
+                  return item.x === selectedBox.x && item.y === selectedBox.y;
+                }
+                let indexOfSquare =
+                  prevSelectedPiece.legalMoves.findIndex(checkSquare);
+
+                if (whiteKingChecked || blackKingChecked) {
+                  if (
+                    whiteKingChecked &&
+                    activeColor.startsWith("w") &&
+                    allPossibleMovesWhiteWhenChecked.length > 0
+                  ) {
+                    let indexOfCheckingPiece =
+                      allPossibleMovesWhiteWhenChecked.findIndex(checkSquare);
+                    if (
+                      indexOfCheckingPiece !== -1 &&
+                      indexOfSquare !== -1 &&
+                      protectingPieceIndex === -1
+                    ) {
                       console.log("move-1=checked");
                       setMoveType(prevSelectedPiece, pieceX, pieceY);
                       if (prevSelectedPiece !== pieces[index]) {
-                        let pieceToRemoveX = pieces[index].x 
-                        let pieceToRemoveY = pieces[index].y
-                        let size = pieces[index].size
-                        let pieceToRemoveColor=pieces[index].color
+                        let pieceToRemoveX = pieces[index].x;
+                        let pieceToRemoveY = pieces[index].y;
+                        let size = pieces[index].size;
+                        let pieceToRemoveColor = pieces[index].color;
                         function checkPiece(item) {
                           return (
                             item.x === pieceToRemoveX &&
                             item.y - size === pieceToRemoveY
                           );
                         }
-                        if(prevSelectedPiece){
-                          if(prevSelectedPiece.color !== selectedPiece.color && prevSelectedPiece.color.indexOf(activeColor) > -1){
-                          
-                            moving= true
+                        if (prevSelectedPiece) {
+                          if (
+                            prevSelectedPiece.color !== selectedPiece.color &&
+                            prevSelectedPiece.color.indexOf(activeColor) > -1
+                          ) {
+                            moving = true;
                             pieces.splice(index, 1);
                             setTimeout(() => {
-                          
-                              prevSelectedPiece.move(pieceX, pieceY,"c");
+                              prevSelectedPiece.move(pieceX, pieceY, "c");
                               halfMoveClock = 0;
-                                console.log("done deleting")
-                                
-                              if(pieceToRemoveColor === "white"){
-                                  
-                                let indexOfRemovedPiece = white_pieces.findIndex(checkPiece);
-                                          removedPieces.push(white_pieces[indexOfRemovedPiece]);
-                                          }
-                                          else if(pieceToRemoveColor === "black"){
-                                            
-                                let indexOfRemovedPiece = black_pieces.findIndex(checkPiece);
-                                          removedPieces.push(black_pieces[indexOfRemovedPiece]);
-                                          }
-                              }, 1000);
-    
-                            }
+                              console.log("done deleting");
+
+                              if (pieceToRemoveColor === "white") {
+                                let indexOfRemovedPiece =
+                                  white_pieces.findIndex(checkPiece);
+                                removedPieces.push(
+                                  white_pieces[indexOfRemovedPiece]
+                                );
+                              } else if (pieceToRemoveColor === "black") {
+                                let indexOfRemovedPiece =
+                                  black_pieces.findIndex(checkPiece);
+                                removedPieces.push(
+                                  black_pieces[indexOfRemovedPiece]
+                                );
+                              }
+                            }, 1000);
+                          }
                         }
-                        
                       } else {
                         console.log("equal");
                       }
-        
+
                       removed = true;
                     }
-                }
-                else if(blackKingChecked && activeColor.startsWith("b") && allPossibleMovesBlackWhenChecked.length > 0){
-                 
-                  let indexOfCheckingPiece =
-                    allPossibleMovesBlackWhenChecked.findIndex(checkSquare);
-                    if (indexOfCheckingPiece !== -1 && indexOfSquare !== -1 && protectingPieceIndex === -1) {
+                  } else if (
+                    blackKingChecked &&
+                    activeColor.startsWith("b") &&
+                    allPossibleMovesBlackWhenChecked.length > 0
+                  ) {
+                    let indexOfCheckingPiece =
+                      allPossibleMovesBlackWhenChecked.findIndex(checkSquare);
+                    if (
+                      indexOfCheckingPiece !== -1 &&
+                      indexOfSquare !== -1 &&
+                      protectingPieceIndex === -1
+                    ) {
                       console.log("move-1=checked");
                       setMoveType(prevSelectedPiece, pieceX, pieceY);
                       if (prevSelectedPiece !== pieces[index]) {
-                        let pieceToRemoveX = pieces[index].x 
-                        let pieceToRemoveY = pieces[index].y
-                        let size = pieces[index].size
-                        let pieceToRemoveColor=pieces[index].color
+                        let pieceToRemoveX = pieces[index].x;
+                        let pieceToRemoveY = pieces[index].y;
+                        let size = pieces[index].size;
+                        let pieceToRemoveColor = pieces[index].color;
                         function checkPiece(item) {
                           return (
                             item.x === pieceToRemoveX &&
                             item.y - size === pieceToRemoveY
                           );
                         }
-                        
-                        if(prevSelectedPiece){
-                          if(prevSelectedPiece.color !== selectedPiece.color && prevSelectedPiece.color.indexOf(activeColor) > -1){
-                          
-                            moving= true
+
+                        if (prevSelectedPiece) {
+                          if (
+                            prevSelectedPiece.color !== selectedPiece.color &&
+                            prevSelectedPiece.color.indexOf(activeColor) > -1
+                          ) {
+                            moving = true;
                             pieces.splice(index, 1);
-                            
-                        setTimeout(() => {
-                          
-                          prevSelectedPiece.move(pieceX, pieceY,"c");
-                          halfMoveClock = 0;
-                            console.log("done deleting")
-                            
-                          if(pieceToRemoveColor === "white"){
-                              
-                            let indexOfRemovedPiece = white_pieces.findIndex(checkPiece);
-                                      removedPieces.push(white_pieces[indexOfRemovedPiece]);
-                                      }
-                                      else if(pieceToRemoveColor === "black"){
-                                        
-                            let indexOfRemovedPiece = black_pieces.findIndex(checkPiece);
-                                      removedPieces.push(black_pieces[indexOfRemovedPiece]);
-                                      }
-                          }, 1000);
-                            }
+
+                            setTimeout(() => {
+                              prevSelectedPiece.move(pieceX, pieceY, "c");
+                              halfMoveClock = 0;
+                              console.log("done deleting");
+
+                              if (pieceToRemoveColor === "white") {
+                                let indexOfRemovedPiece =
+                                  white_pieces.findIndex(checkPiece);
+                                removedPieces.push(
+                                  white_pieces[indexOfRemovedPiece]
+                                );
+                              } else if (pieceToRemoveColor === "black") {
+                                let indexOfRemovedPiece =
+                                  black_pieces.findIndex(checkPiece);
+                                removedPieces.push(
+                                  black_pieces[indexOfRemovedPiece]
+                                );
+                              }
+                            }, 1000);
+                          }
                         }
                       } else {
                         console.log("equal");
                       }
-        
+
                       removed = true;
                     }
-                }
-              }
-              else{
-                if (indexOfSquare !== -1 && protectingPieceIndex === -1) {
-                  console.log("move-1");
-                  setMoveType(prevSelectedPiece, pieceX, pieceY);
-                  if (prevSelectedPiece !== pieces[index]) {
-                    let pieceToRemoveX = pieces[index].x 
-                    let pieceToRemoveY = pieces[index].y
-                    let size = pieces[index].size
-                    let pieceToRemoveColor=pieces[index].color
-                    function checkPiece(item) {
-                      return (
-                        item.x === pieceToRemoveX &&
-                        item.y - size === pieceToRemoveY
-                      );
-                    }
-              
-                    if(prevSelectedPiece.color !== selectedPiece.color && prevSelectedPiece.color.indexOf(activeColor) > -1){
-                          
-                      moving= true
-                      pieces.splice(index, 1);
-                      setTimeout(() => {
-                      
-                        prevSelectedPiece.move(pieceX, pieceY,"c");
-                        halfMoveClock = 0;
-                          console.log("done deleting")
-                          
-                        if(pieceToRemoveColor === "white"){
-                            
-                          let indexOfRemovedPiece = white_pieces.findIndex(checkPiece);
-                                    removedPieces.push(white_pieces[indexOfRemovedPiece]);
-                                    }
-                                    else if(pieceToRemoveColor === "black"){
-                                      
-                          let indexOfRemovedPiece = black_pieces.findIndex(checkPiece);
-                                    removedPieces.push(black_pieces[indexOfRemovedPiece]);
-                                    }
+                  }
+                } else {
+                  if (indexOfSquare !== -1 && protectingPieceIndex === -1) {
+                    console.log("move-1");
+                    setMoveType(prevSelectedPiece, pieceX, pieceY);
+                    if (prevSelectedPiece !== pieces[index]) {
+                      let pieceToRemoveX = pieces[index].x;
+                      let pieceToRemoveY = pieces[index].y;
+                      let size = pieces[index].size;
+                      let pieceToRemoveColor = pieces[index].color;
+                      function checkPiece(item) {
+                        return (
+                          item.x === pieceToRemoveX &&
+                          item.y - size === pieceToRemoveY
+                        );
+                      }
+
+                      if (
+                        prevSelectedPiece.color !== selectedPiece.color &&
+                        prevSelectedPiece.color.indexOf(activeColor) > -1
+                      ) {
+                        moving = true;
+                        pieces.splice(index, 1);
+                        setTimeout(() => {
+                          prevSelectedPiece.move(pieceX, pieceY, "c");
+                          halfMoveClock = 0;
+                          console.log("done deleting");
+
+                          if (pieceToRemoveColor === "white") {
+                            let indexOfRemovedPiece =
+                              white_pieces.findIndex(checkPiece);
+                            removedPieces.push(
+                              white_pieces[indexOfRemovedPiece]
+                            );
+                          } else if (pieceToRemoveColor === "black") {
+                            let indexOfRemovedPiece =
+                              black_pieces.findIndex(checkPiece);
+                            removedPieces.push(
+                              black_pieces[indexOfRemovedPiece]
+                            );
+                          }
                         }, 1000);
                       }
-                  
-                  } else {
-                    console.log("equal");
+                    } else {
+                      console.log("equal");
+                    }
+
+                    removed = true;
                   }
-    
-                  removed = true;
                 }
+              }
+            }
+          }
+        } else {
+          if (prevSelectedPiece && protectingPieceIndex === -1) {
+            function checkSquare(item) {
+              return item.x === selectedBox.x && item.y === selectedBox.y;
+            }
+            let indexOfSquare =
+              prevSelectedPiece.legalMoves.findIndex(checkSquare);
+
+            if (whiteKingChecked || blackKingChecked) {
+              if (
+                whiteKingChecked &&
+                activeColor.startsWith("w") &&
+                allPossibleMovesWhiteWhenChecked.length > 0
+              ) {
+                let indexOfCheckingPiece =
+                  allPossibleMovesWhiteWhenChecked.findIndex(checkSquare);
+                if (
+                  indexOfCheckingPiece !== -1 &&
+                  indexOfSquare !== -1 &&
+                  protectingPieceIndex === -1
+                ) {
+                  if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
+                    if (
+                      prevSelectedPiece.x !== pieceX ||
+                      prevSelectedPiece.y !== pieceY
+                    ) {
+                      moving = true;
+                      setMoveType(prevSelectedPiece, pieceX, pieceY);
+                      console.log("move-2a=checked");
+                      setTimeout(() => {
+                        prevSelectedPiece.move(pieceX, pieceY, "e");
+                      }, 1000);
+                    }
+                  } else {
+                    if (
+                      prevSelectedPiece.x !== pieceX ||
+                      prevSelectedPiece.y !== pieceY
+                    ) {
+                      moving = true;
+                      setMoveType(prevSelectedPiece, pieceX, pieceY);
+                      console.log("move-2b=checked");
+                      if (
+                        prevSelectedPiece.prevMoveType.startsWith("en") &&
+                        prevSelectedPiece.name.toLowerCase().charAt(0) === "p"
+                      ) {
+                        prevSelectedPiece.move(pieceX, pieceY, "b");
+                      } else {
+                        prevSelectedPiece.move(pieceX, pieceY);
+                      }
+                    }
+                  }
+                } else {
+                  selectedPiece = null;
+                  prevSelectedPiece = null;
+                  selectedBox = null;
+                  prevSelectedBox = null;
+                  possibleMoves = [];
+                }
+              } else if (
+                blackKingChecked &&
+                activeColor.startsWith("b") &&
+                allPossibleMovesBlackWhenChecked.length > 0
+              ) {
+                let indexOfCheckingPiece =
+                  allPossibleMovesBlackWhenChecked.findIndex(checkSquare);
+                if (
+                  indexOfCheckingPiece !== -1 &&
+                  indexOfSquare !== -1 &&
+                  protectingPieceIndex === -1
+                ) {
+                  if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
+                    if (
+                      prevSelectedPiece.x !== pieceX ||
+                      prevSelectedPiece.y !== pieceY
+                    ) {
+                      moving = true;
+                      setMoveType(prevSelectedPiece, pieceX, pieceY);
+                      console.log("move-2a=checked");
+                      setTimeout(() => {
+                        prevSelectedPiece.move(pieceX, pieceY, "e");
+                      }, 1000);
+                    }
+                  } else {
+                    if (
+                      prevSelectedPiece.x !== pieceX ||
+                      prevSelectedPiece.y !== pieceY
+                    ) {
+                      moving = true;
+                      setMoveType(prevSelectedPiece, pieceX, pieceY);
+                      console.log("move-2b=checked");
+                      if (
+                        prevSelectedPiece.prevMoveType.startsWith("en") &&
+                        prevSelectedPiece.name.toLowerCase().charAt(0) === "p"
+                      ) {
+                        prevSelectedPiece.move(pieceX, pieceY, "b");
+                      } else {
+                        prevSelectedPiece.move(pieceX, pieceY);
+                      }
+                    }
+                  }
+                } else {
+                  selectedPiece = null;
+                  prevSelectedPiece = null;
+                  selectedBox = null;
+                  prevSelectedBox = null;
+                  possibleMoves = [];
+                }
+              }
+            } else {
+              if (indexOfSquare !== -1 && protectingPieceIndex === -1) {
+                if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
+                  if (
+                    prevSelectedPiece.x !== pieceX ||
+                    prevSelectedPiece.y !== pieceY
+                  ) {
+                    moving = true;
+                    setMoveType(prevSelectedPiece, pieceX, pieceY);
+                    console.log("move-2a");
+                    setTimeout(() => {
+                      prevSelectedPiece.move(pieceX, pieceY, "e");
+                    }, 1000);
+                  }
+                } else {
+                  if (
+                    prevSelectedPiece.x !== pieceX ||
+                    prevSelectedPiece.y !== pieceY
+                  ) {
+                    moving = true;
+                    setMoveType(prevSelectedPiece, pieceX, pieceY);
+                    console.log("move-2b");
+                    if (
+                      prevSelectedPiece.prevMoveType.startsWith("en") &&
+                      prevSelectedPiece.name.toLowerCase().charAt(0) === "p"
+                    ) {
+                      prevSelectedPiece.move(pieceX, pieceY, "b");
+                    } else {
+                      prevSelectedPiece.move(pieceX, pieceY);
+                    }
+                  }
+                }
+              } else {
+                selectedPiece = null;
+                prevSelectedPiece = null;
+                selectedBox = null;
+                prevSelectedBox = null;
+                possibleMoves = [];
+
+                moving = false;
               }
             }
           }
         }
       } else {
-        
-        if (prevSelectedPiece && protectingPieceIndex === -1) {
-          function checkSquare(item) {
-            return item.x === selectedBox.x && item.y === selectedBox.y;
-          }
-          let indexOfSquare = prevSelectedPiece.legalMoves.findIndex(checkSquare);
-    
-          if(whiteKingChecked || blackKingChecked){
-    
-            if(whiteKingChecked && activeColor.startsWith("w") && allPossibleMovesWhiteWhenChecked.length > 0){
-             
-              let indexOfCheckingPiece =
-                allPossibleMovesWhiteWhenChecked.findIndex(checkSquare);
-                if (indexOfCheckingPiece !== -1 && indexOfSquare !== -1 && protectingPieceIndex === -1) {
-                  if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
-                    if (
-                      prevSelectedPiece.x !== pieceX ||
-                      prevSelectedPiece.y !== pieceY
-                    ) {
-                      
-                      moving = true
-                      setMoveType(prevSelectedPiece, pieceX, pieceY);
-                      console.log("move-2a=checked");
-                      setTimeout(()=>{
-        
-                        prevSelectedPiece.move(pieceX, pieceY,"e");
-                      },1000)
-                    }
-                  } else {
-                    if (
-                      prevSelectedPiece.x !== pieceX ||
-                      prevSelectedPiece.y !== pieceY
-                    ) {
-                      
-                        moving = true
-                      setMoveType(prevSelectedPiece, pieceX, pieceY);
-                      console.log("move-2b=checked");
-                      if(prevSelectedPiece.prevMoveType.startsWith("en") && prevSelectedPiece.name.toLowerCase().charAt(0) === "p"){
-                        
-                        prevSelectedPiece.move(pieceX, pieceY,"b");
-                        }
-                        else{
-                          
-                        prevSelectedPiece.move(pieceX, pieceY);
-                        }
-                     
-                    }
-                  }
-                } else {
-                  selectedPiece = null;
-                  prevSelectedPiece = null;
-                  selectedBox = null;
-                  prevSelectedBox = null;
-                  possibleMoves = [];
-                }
-          
-            }
-            else if(blackKingChecked && activeColor.startsWith("b") && allPossibleMovesBlackWhenChecked.length > 0){
-             
-              let indexOfCheckingPiece =
-                allPossibleMovesBlackWhenChecked.findIndex(checkSquare);
-                if (indexOfCheckingPiece !== -1 && indexOfSquare !== -1 && protectingPieceIndex === -1) {
-                  if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
-                    if (
-                      prevSelectedPiece.x !== pieceX ||
-                      prevSelectedPiece.y !== pieceY
-                    ) {
-                      
-                      moving = true
-                      setMoveType(prevSelectedPiece, pieceX, pieceY);
-                      console.log("move-2a=checked");
-                      setTimeout(()=>{
-        
-                        prevSelectedPiece.move(pieceX, pieceY,"e");
-                      },1000)
-                    }
-                  } else {
-                    if (
-                      prevSelectedPiece.x !== pieceX ||
-                      prevSelectedPiece.y !== pieceY
-                    ) {
-                      
-                      moving = true
-                      setMoveType(prevSelectedPiece, pieceX, pieceY);
-                      console.log("move-2b=checked");
-                      if(prevSelectedPiece.prevMoveType.startsWith("en") && prevSelectedPiece.name.toLowerCase().charAt(0) === "p"){
-                        
-                        prevSelectedPiece.move(pieceX, pieceY,"b");
-                        }
-                        else{
-                          
-                        prevSelectedPiece.move(pieceX, pieceY);
-                        }
-                     
-                    }
-                  }
-                } else {
-                  selectedPiece = null;
-                  prevSelectedPiece = null;
-                  selectedBox = null;
-                  prevSelectedBox = null;
-                  possibleMoves = [];
-                }
-            }
-          }
-          else{
-            if (indexOfSquare !== -1 && protectingPieceIndex === -1) {
-              if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
-                if (
-                  prevSelectedPiece.x !== pieceX ||
-                  prevSelectedPiece.y !== pieceY
-                ) {
-                  
-                  moving = true
-                  setMoveType(prevSelectedPiece, pieceX, pieceY);
-                  console.log("move-2a");
-                  setTimeout(()=>{
-    
-                    prevSelectedPiece.move(pieceX, pieceY,"e");
-                  },1000)
-                }
-              } else {
-                if (
-                  prevSelectedPiece.x !== pieceX ||
-                  prevSelectedPiece.y !== pieceY
-                ) {
-                  
-                  moving = true
-                  setMoveType(prevSelectedPiece, pieceX, pieceY);
-                  console.log("move-2b");
-                  if(prevSelectedPiece.prevMoveType.startsWith("en") && prevSelectedPiece.name.toLowerCase().charAt(0) === "p"){
-                        
-                    prevSelectedPiece.move(pieceX, pieceY,"b");
-                    }
-                    else{
-                      
-                    prevSelectedPiece.move(pieceX, pieceY);
-                    }
-                 
-                }
-              }
-            } else {
-              selectedPiece = null;
-              prevSelectedPiece = null;
-              selectedBox = null;
-              prevSelectedBox = null;
-              possibleMoves = [];
-              
-              moving =false
-            }
-          }        
-          
-        }
+        console.log("out");
+        selectedPiece = null;
+        prevSelectedPiece = null;
+        selectedBox = null;
+        prevSelectedBox = null;
+        possibleMoves = [];
       }
-    } else {
-      console.log("out");
-      selectedPiece = null;
-      prevSelectedPiece = null;
-      selectedBox = null;
-      prevSelectedBox = null;
-      possibleMoves = [];
     }
-      }
   }
 }
-
 
 function movePiece(box_name) {
-  making_opp_move = true
-  if(gameState){
-    
-  if(!moving && !gameState.drawRequested && !gameState.over && !dialogOpen){
-    
-    let pieceX;
-    let pieceY;
-    let index = -1;
-    let occupied = false;
-    for (let i = 0; i < squares.length; i++) {
-      if (squares[i].name === box_name ) {
-        selectedBox = squares[i];
-        pieceX = selectedBox.x;
-        pieceY = selectedBox.y;
-      }
-    }
-    let inside = FindPoint(
-      boardLength - boardLength,
-      boardLength - boardLength,
-      boardLength,
-      boardLength,
-      pieceX,
-      pieceY
-    );
-    
-    if (inside) {
-      
-    generateFEN();
-      if (selectedBox && !moving) {
-        prevSelectedBox = selectedBox;
-      }
+  making_opp_move = true;
+  if (gameState) {
+    if (!moving && !gameState.drawRequested && !gameState.over && !dialogOpen) {
+      let pieceX;
+      let pieceY;
+      let index = -1;
+      let occupied = false;
       for (let i = 0; i < squares.length; i++) {
-        if (squares[i].clicked(pieceX, pieceY) ) {
+        if (squares[i].name === box_name) {
           selectedBox = squares[i];
           pieceX = selectedBox.x;
           pieceY = selectedBox.y;
         }
       }
-      console.log("seletedB", selectedBox);
-      if (selectedPiece) {
-        prevSelectedPiece = selectedPiece;
-      }
-      occupied = selectedBox.occupied;
-      for (let j = 0; j < pieces.length; j++) {
-        if (pieces[j].clicked(pieceX, pieceY)  && !moving) {
-          index = j;
-    
-          selectedPiece = pieces[index];
-          selctedBox = squares[index];
+      let inside = FindPoint(
+        boardLength - boardLength,
+        boardLength - boardLength,
+        boardLength,
+        boardLength,
+        pieceX,
+        pieceY
+      );
+
+      if (inside) {
+        generateFEN();
+        if (selectedBox && !moving) {
+          prevSelectedBox = selectedBox;
         }
-      }
-      console.log("s", selectedPiece);
-      console.log("ps", prevSelectedPiece);
-    
-      function checkIfOpenCheckPiece(item) {
-        return (
-          item.x === prevSelectedPiece.x &&
-          item.y === prevSelectedPiece.y
-        );
-      }
-      let protectingPieceIndex = 1
-      
-      console.log("alloewdWhiteopen",allMovesForWhiteOpenCheck)
-      console.log("all allowed blavkopoen",allMovesForBlackOpenCheck)
-      if(prevSelectedPiece){
-        function checkIfAllowedOpenCheckMove(item) {
+        for (let i = 0; i < squares.length; i++) {
+          if (squares[i].clicked(pieceX, pieceY)) {
+            selectedBox = squares[i];
+            pieceX = selectedBox.x;
+            pieceY = selectedBox.y;
+          }
+        }
+        console.log("seletedB", selectedBox);
+        if (selectedPiece) {
+          prevSelectedPiece = selectedPiece;
+        }
+        occupied = selectedBox.occupied;
+        for (let j = 0; j < pieces.length; j++) {
+          if (pieces[j].clicked(pieceX, pieceY) && !moving) {
+            index = j;
+
+            selectedPiece = pieces[index];
+            selctedBox = squares[index];
+          }
+        }
+        console.log("s", selectedPiece);
+        console.log("ps", prevSelectedPiece);
+
+        function checkIfOpenCheckPiece(item) {
           return (
-            item.x === selectedBox.x &&
-            item.y === selectedBox.y
+            item.x === prevSelectedPiece.x && item.y === prevSelectedPiece.y
           );
         }
-        
-        if(prevSelectedPiece.color ==="white"){
-        
-          let piecesBlocked=[]
-          protectingPieceIndex = pieces_protecting_white_king.findIndex(checkIfOpenCheckPiece)
-          
-          console.log("index wite", protectingPieceIndex)
-          if(protectingPieceIndex > -1){
-            let count = 0
-            for(let p of opponent_pieces_around_white_king){
-              p.legalMoves.forEach(move =>{
-                if(prevSelectedPiece.x === move.x && prevSelectedPiece.y ===move.y ){
-                  count ++
-                  piecesBlocked.push(p)
-                }
-              })
-            }
-            
-            console.log("blockedpppppppp",piecesBlocked)
-            if(count >= 1){
-              if(piecesBlocked.length === 1){
-                getPossibleNonOpenCheckMoves(piecesBlocked[0],prevSelectedPiece)
-                let allowed = allMovesForWhiteOpenCheck.findIndex(checkIfAllowedOpenCheckMove)
-                if(allowed !== -1){
-                  
-                protectingPieceIndex = -1
-                console.log("wertyuiop[")
-                }
-                else{
-                  
-              protectingPieceIndex = 1
-                }
+        let protectingPieceIndex = 1;
+
+        console.log("alloewdWhiteopen", allMovesForWhiteOpenCheck);
+        console.log("all allowed blavkopoen", allMovesForBlackOpenCheck);
+        if (prevSelectedPiece) {
+          function checkIfAllowedOpenCheckMove(item) {
+            return item.x === selectedBox.x && item.y === selectedBox.y;
+          }
+
+          if (prevSelectedPiece.color === "white") {
+            let piecesBlocked = [];
+            protectingPieceIndex = pieces_protecting_white_king.findIndex(
+              checkIfOpenCheckPiece
+            );
+
+            console.log("index wite", protectingPieceIndex);
+            if (protectingPieceIndex > -1) {
+              let count = 0;
+              for (let p of opponent_pieces_around_white_king) {
+                p.legalMoves.forEach((move) => {
+                  if (
+                    prevSelectedPiece.x === move.x &&
+                    prevSelectedPiece.y === move.y
+                  ) {
+                    count++;
+                    piecesBlocked.push(p);
+                  }
+                });
               }
-              else{
-                
-              protectingPieceIndex = 1
+
+              console.log("blockedpppppppp", piecesBlocked);
+              if (count >= 1) {
+                if (piecesBlocked.length === 1) {
+                  getPossibleNonOpenCheckMoves(
+                    piecesBlocked[0],
+                    prevSelectedPiece
+                  );
+                  let allowed = allMovesForWhiteOpenCheck.findIndex(
+                    checkIfAllowedOpenCheckMove
+                  );
+                  if (allowed !== -1) {
+                    protectingPieceIndex = -1;
+                    console.log("wertyuiop[");
+                  } else {
+                    protectingPieceIndex = 1;
+                  }
+                } else {
+                  protectingPieceIndex = 1;
+                }
+              } else {
+                protectingPieceIndex = -1;
               }
-            }
-            else{
-              
-              protectingPieceIndex = -1
             }
           }
-         }
-    
-         if(prevSelectedPiece.color ==="black"){
-           
-        let piecesBlocked=[]
-            protectingPieceIndex = pieces_protecting_black_king.findIndex(checkIfOpenCheckPiece)
-            console.log("index", protectingPieceIndex)
-            if(protectingPieceIndex > -1){
-              let count = 0
-              for(let p of opponent_pieces_around_black_king){
-                p.legalMoves.forEach(move =>{
-                  if(prevSelectedPiece.x === move.x && prevSelectedPiece.y === move.y ){
-                    count ++
-                    piecesBlocked.push(p)
+
+          if (prevSelectedPiece.color === "black") {
+            let piecesBlocked = [];
+            protectingPieceIndex = pieces_protecting_black_king.findIndex(
+              checkIfOpenCheckPiece
+            );
+            console.log("index", protectingPieceIndex);
+            if (protectingPieceIndex > -1) {
+              let count = 0;
+              for (let p of opponent_pieces_around_black_king) {
+                p.legalMoves.forEach((move) => {
+                  if (
+                    prevSelectedPiece.x === move.x &&
+                    prevSelectedPiece.y === move.y
+                  ) {
+                    count++;
+                    piecesBlocked.push(p);
                   }
-                })
+                });
               }
-              console.log("blockedpppppppp",piecesBlocked)
-              if(count >= 1){
-                
-                if(piecesBlocked.length === 1){
-                getPossibleNonOpenCheckMoves(piecesBlocked[0],prevSelectedPiece)
-                let allowed = allMovesForBlackOpenCheck.findIndex(checkIfAllowedOpenCheckMove)
-                if(allowed !== -1){
-                  
-                protectingPieceIndex = -1
-                console.log("wertyuiop[")
+              console.log("blockedpppppppp", piecesBlocked);
+              if (count >= 1) {
+                if (piecesBlocked.length === 1) {
+                  getPossibleNonOpenCheckMoves(
+                    piecesBlocked[0],
+                    prevSelectedPiece
+                  );
+                  let allowed = allMovesForBlackOpenCheck.findIndex(
+                    checkIfAllowedOpenCheckMove
+                  );
+                  if (allowed !== -1) {
+                    protectingPieceIndex = -1;
+                    console.log("wertyuiop[");
+                  } else {
+                    protectingPieceIndex = 1;
+                  }
+                } else {
+                  protectingPieceIndex = 1;
                 }
-                else{
-                  
-              protectingPieceIndex = 1
-                }
-              }
-              else{
-                
-              protectingPieceIndex = 1
-              }
-              }
-              else{
-              
-                protectingPieceIndex = -1
+              } else {
+                protectingPieceIndex = -1;
               }
             }
-            
-           }
-           
-      }
-      
-      if (
-        selectedPiece &&
-        prevSelectedPiece !== selectedPiece &&
-        selectedPiece.color.startsWith(activeColor) 
-      ) {
-        selectedPiece.getPossibleMoves();
-      }
-    console.log(protectingPieceIndex,"EWTEEEEeTz")
-      if (occupied) {
-        if (index > -1 && prevSelectedPiece !== selectedPiece) {
-          if (prevSelectedPiece !== null) {
-            if (
-              prevSelectedPiece.x !== pieces[index].x ||
-              prevSelectedPiece.y !== pieces[index].y
-            ) {
-              function checkSquare(item) {
-                return item.x === selectedBox.x && item.y === selectedBox.y;
-              }
-              let indexOfSquare =
-                prevSelectedPiece.legalMoves.findIndex(checkSquare);
-    
-              if(whiteKingChecked || blackKingChecked){
-    
-                if(whiteKingChecked && activeColor.startsWith("w") && allPossibleMovesWhiteWhenChecked.length > 0){
-                  
-                  let indexOfCheckingPiece =
-                    allPossibleMovesWhiteWhenChecked.findIndex(checkSquare);
-                    if (indexOfCheckingPiece !== -1 && indexOfSquare !== -1 && protectingPieceIndex === -1) {
+          }
+        }
+
+        if (
+          selectedPiece &&
+          prevSelectedPiece !== selectedPiece &&
+          selectedPiece.color.startsWith(activeColor)
+        ) {
+          selectedPiece.getPossibleMoves();
+        }
+        console.log(protectingPieceIndex, "EWTEEEEeTz");
+        if (occupied) {
+          if (index > -1 && prevSelectedPiece !== selectedPiece) {
+            if (prevSelectedPiece !== null) {
+              if (
+                prevSelectedPiece.x !== pieces[index].x ||
+                prevSelectedPiece.y !== pieces[index].y
+              ) {
+                function checkSquare(item) {
+                  return item.x === selectedBox.x && item.y === selectedBox.y;
+                }
+                let indexOfSquare =
+                  prevSelectedPiece.legalMoves.findIndex(checkSquare);
+
+                if (whiteKingChecked || blackKingChecked) {
+                  if (
+                    whiteKingChecked &&
+                    activeColor.startsWith("w") &&
+                    allPossibleMovesWhiteWhenChecked.length > 0
+                  ) {
+                    let indexOfCheckingPiece =
+                      allPossibleMovesWhiteWhenChecked.findIndex(checkSquare);
+                    if (
+                      indexOfCheckingPiece !== -1 &&
+                      indexOfSquare !== -1 &&
+                      protectingPieceIndex === -1
+                    ) {
                       console.log("move-1=checked");
                       setMoveType(prevSelectedPiece, pieceX, pieceY);
                       if (prevSelectedPiece !== pieces[index]) {
-                        let pieceToRemoveX = pieces[index].x 
-                        let pieceToRemoveY = pieces[index].y
-                        let size = pieces[index].size
-                        let pieceToRemoveColor=pieces[index].color
+                        let pieceToRemoveX = pieces[index].x;
+                        let pieceToRemoveY = pieces[index].y;
+                        let size = pieces[index].size;
+                        let pieceToRemoveColor = pieces[index].color;
                         function checkPiece(item) {
                           return (
                             item.x === pieceToRemoveX &&
                             item.y - size === pieceToRemoveY
                           );
                         }
-                        if(prevSelectedPiece){
-                          if(prevSelectedPiece.color !== selectedPiece.color && prevSelectedPiece.color.indexOf(activeColor) > -1){
-                          
-                            moving= true
+                        if (prevSelectedPiece) {
+                          if (
+                            prevSelectedPiece.color !== selectedPiece.color &&
+                            prevSelectedPiece.color.indexOf(activeColor) > -1
+                          ) {
+                            moving = true;
                             pieces.splice(index, 1);
                             setTimeout(() => {
-                          
                               prevSelectedPiece.move(pieceX, pieceY);
                               halfMoveClock = 0;
-                                console.log("done deleting")
-                                
-                              if(pieceToRemoveColor === "white"){
-                                  
-                                let indexOfRemovedPiece = white_pieces.findIndex(checkPiece);
-                                          removedPieces.push(white_pieces[indexOfRemovedPiece]);
-                                          }
-                                          else if(pieceToRemoveColor === "black"){
-                                            
-                                let indexOfRemovedPiece = black_pieces.findIndex(checkPiece);
-                                          removedPieces.push(black_pieces[indexOfRemovedPiece]);
-                                          }
-                              }, 1000);
-    
-                            }
+                              console.log("done deleting");
+
+                              if (pieceToRemoveColor === "white") {
+                                let indexOfRemovedPiece =
+                                  white_pieces.findIndex(checkPiece);
+                                removedPieces.push(
+                                  white_pieces[indexOfRemovedPiece]
+                                );
+                              } else if (pieceToRemoveColor === "black") {
+                                let indexOfRemovedPiece =
+                                  black_pieces.findIndex(checkPiece);
+                                removedPieces.push(
+                                  black_pieces[indexOfRemovedPiece]
+                                );
+                              }
+                            }, 1000);
+                          }
                         }
-                        
                       } else {
                         console.log("equal");
                       }
-        
+
                       removed = true;
                     }
-                }
-                else if(blackKingChecked && activeColor.startsWith("b") && allPossibleMovesBlackWhenChecked.length > 0){
-                 
-                  let indexOfCheckingPiece =
-                    allPossibleMovesBlackWhenChecked.findIndex(checkSquare);
-                    if (indexOfCheckingPiece !== -1 && indexOfSquare !== -1 && protectingPieceIndex === -1) {
+                  } else if (
+                    blackKingChecked &&
+                    activeColor.startsWith("b") &&
+                    allPossibleMovesBlackWhenChecked.length > 0
+                  ) {
+                    let indexOfCheckingPiece =
+                      allPossibleMovesBlackWhenChecked.findIndex(checkSquare);
+                    if (
+                      indexOfCheckingPiece !== -1 &&
+                      indexOfSquare !== -1 &&
+                      protectingPieceIndex === -1
+                    ) {
                       console.log("move-1=checked");
                       setMoveType(prevSelectedPiece, pieceX, pieceY);
                       if (prevSelectedPiece !== pieces[index]) {
-                        let pieceToRemoveX = pieces[index].x 
-                        let pieceToRemoveY = pieces[index].y
-                        let size = pieces[index].size
-                        let pieceToRemoveColor=pieces[index].color
+                        let pieceToRemoveX = pieces[index].x;
+                        let pieceToRemoveY = pieces[index].y;
+                        let size = pieces[index].size;
+                        let pieceToRemoveColor = pieces[index].color;
                         function checkPiece(item) {
                           return (
                             item.x === pieceToRemoveX &&
                             item.y - size === pieceToRemoveY
                           );
                         }
-                        
-                        if(prevSelectedPiece){
-                          if(prevSelectedPiece.color !== selectedPiece.color && prevSelectedPiece.color.indexOf(activeColor) > -1){
-                          
-                            moving= true
+
+                        if (prevSelectedPiece) {
+                          if (
+                            prevSelectedPiece.color !== selectedPiece.color &&
+                            prevSelectedPiece.color.indexOf(activeColor) > -1
+                          ) {
+                            moving = true;
                             pieces.splice(index, 1);
-                            
-                        setTimeout(() => {
-                          
-                          prevSelectedPiece.move(pieceX, pieceY);
-                          halfMoveClock = 0;
-                            console.log("done deleting")
-                            
-                          if(pieceToRemoveColor === "white"){
-                              
-                            let indexOfRemovedPiece = white_pieces.findIndex(checkPiece);
-                                      removedPieces.push(white_pieces[indexOfRemovedPiece]);
-                                      }
-                                      else if(pieceToRemoveColor === "black"){
-                                        
-                            let indexOfRemovedPiece = black_pieces.findIndex(checkPiece);
-                                      removedPieces.push(black_pieces[indexOfRemovedPiece]);
-                                      }
-                          }, 1000);
-                            }
+
+                            setTimeout(() => {
+                              prevSelectedPiece.move(pieceX, pieceY);
+                              halfMoveClock = 0;
+                              console.log("done deleting");
+
+                              if (pieceToRemoveColor === "white") {
+                                let indexOfRemovedPiece =
+                                  white_pieces.findIndex(checkPiece);
+                                removedPieces.push(
+                                  white_pieces[indexOfRemovedPiece]
+                                );
+                              } else if (pieceToRemoveColor === "black") {
+                                let indexOfRemovedPiece =
+                                  black_pieces.findIndex(checkPiece);
+                                removedPieces.push(
+                                  black_pieces[indexOfRemovedPiece]
+                                );
+                              }
+                            }, 1000);
+                          }
                         }
                       } else {
                         console.log("equal");
                       }
-        
+
                       removed = true;
                     }
-                }
-              }
-              else{
-                if (indexOfSquare !== -1 && protectingPieceIndex === -1) {
-                  console.log("move-1");
-                  setMoveType(prevSelectedPiece, pieceX, pieceY);
-                  if (prevSelectedPiece !== pieces[index]) {
-                    let pieceToRemoveX = pieces[index].x 
-                    let pieceToRemoveY = pieces[index].y
-                    let size = pieces[index].size
-                    let pieceToRemoveColor=pieces[index].color
-                    function checkPiece(item) {
-                      return (
-                        item.x === pieceToRemoveX &&
-                        item.y - size === pieceToRemoveY
-                      );
-                    }
-              
-                    if(prevSelectedPiece.color !== selectedPiece.color && prevSelectedPiece.color.indexOf(activeColor) > -1){
-                          
-                      moving= true
-                      pieces.splice(index, 1);
-                      setTimeout(() => {
-                      
-                        prevSelectedPiece.move(pieceX, pieceY);
-                        halfMoveClock = 0;
-                          console.log("done deleting")
-                          
-                        if(pieceToRemoveColor === "white"){
-                            
-                          let indexOfRemovedPiece = white_pieces.findIndex(checkPiece);
-                                    removedPieces.push(white_pieces[indexOfRemovedPiece]);
-                                    }
-                                    else if(pieceToRemoveColor === "black"){
-                                      
-                          let indexOfRemovedPiece = black_pieces.findIndex(checkPiece);
-                                    removedPieces.push(black_pieces[indexOfRemovedPiece]);
-                                    }
+                  }
+                } else {
+                  if (indexOfSquare !== -1 && protectingPieceIndex === -1) {
+                    console.log("move-1");
+                    setMoveType(prevSelectedPiece, pieceX, pieceY);
+                    if (prevSelectedPiece !== pieces[index]) {
+                      let pieceToRemoveX = pieces[index].x;
+                      let pieceToRemoveY = pieces[index].y;
+                      let size = pieces[index].size;
+                      let pieceToRemoveColor = pieces[index].color;
+                      function checkPiece(item) {
+                        return (
+                          item.x === pieceToRemoveX &&
+                          item.y - size === pieceToRemoveY
+                        );
+                      }
+
+                      if (
+                        prevSelectedPiece.color !== selectedPiece.color &&
+                        prevSelectedPiece.color.indexOf(activeColor) > -1
+                      ) {
+                        moving = true;
+                        pieces.splice(index, 1);
+                        setTimeout(() => {
+                          prevSelectedPiece.move(pieceX, pieceY);
+                          halfMoveClock = 0;
+                          console.log("done deleting");
+
+                          if (pieceToRemoveColor === "white") {
+                            let indexOfRemovedPiece =
+                              white_pieces.findIndex(checkPiece);
+                            removedPieces.push(
+                              white_pieces[indexOfRemovedPiece]
+                            );
+                          } else if (pieceToRemoveColor === "black") {
+                            let indexOfRemovedPiece =
+                              black_pieces.findIndex(checkPiece);
+                            removedPieces.push(
+                              black_pieces[indexOfRemovedPiece]
+                            );
+                          }
                         }, 1000);
                       }
-                  
-                  } else {
-                    console.log("equal");
+                    } else {
+                      console.log("equal");
+                    }
+
+                    removed = true;
                   }
-    
-                  removed = true;
                 }
+              }
+            }
+          }
+        } else {
+          if (prevSelectedPiece && protectingPieceIndex === -1) {
+            function checkSquare(item) {
+              return item.x === selectedBox.x && item.y === selectedBox.y;
+            }
+            let indexOfSquare =
+              prevSelectedPiece.legalMoves.findIndex(checkSquare);
+
+            if (whiteKingChecked || blackKingChecked) {
+              if (
+                whiteKingChecked &&
+                activeColor.startsWith("w") &&
+                allPossibleMovesWhiteWhenChecked.length > 0
+              ) {
+                let indexOfCheckingPiece =
+                  allPossibleMovesWhiteWhenChecked.findIndex(checkSquare);
+                if (
+                  indexOfCheckingPiece !== -1 &&
+                  indexOfSquare !== -1 &&
+                  protectingPieceIndex === -1
+                ) {
+                  if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
+                    if (
+                      prevSelectedPiece.x !== pieceX ||
+                      prevSelectedPiece.y !== pieceY
+                    ) {
+                      moving = true;
+                      setMoveType(prevSelectedPiece, pieceX, pieceY);
+                      console.log("move-2a=checked");
+                      setTimeout(() => {
+                        prevSelectedPiece.move(pieceX, pieceY);
+                      }, 1000);
+                    }
+                  } else {
+                    if (
+                      prevSelectedPiece.x !== pieceX ||
+                      prevSelectedPiece.y !== pieceY
+                    ) {
+                      moving = true;
+                      setMoveType(prevSelectedPiece, pieceX, pieceY);
+                      console.log("move-2b=checked");
+                      prevSelectedPiece.move(pieceX, pieceY);
+                    }
+                  }
+                } else {
+                  selectedPiece = null;
+                  prevSelectedPiece = null;
+                  selectedBox = null;
+                  prevSelectedBox = null;
+                  possibleMoves = [];
+                }
+              } else if (
+                blackKingChecked &&
+                activeColor.startsWith("b") &&
+                allPossibleMovesBlackWhenChecked.length > 0
+              ) {
+                let indexOfCheckingPiece =
+                  allPossibleMovesBlackWhenChecked.findIndex(checkSquare);
+                if (
+                  indexOfCheckingPiece !== -1 &&
+                  indexOfSquare !== -1 &&
+                  protectingPieceIndex === -1
+                ) {
+                  if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
+                    if (
+                      prevSelectedPiece.x !== pieceX ||
+                      prevSelectedPiece.y !== pieceY
+                    ) {
+                      moving = true;
+                      setMoveType(prevSelectedPiece, pieceX, pieceY);
+                      console.log("move-2a=checked");
+                      setTimeout(() => {
+                        prevSelectedPiece.move(pieceX, pieceY);
+                      }, 1000);
+                    }
+                  } else {
+                    if (
+                      prevSelectedPiece.x !== pieceX ||
+                      prevSelectedPiece.y !== pieceY
+                    ) {
+                      moving = true;
+                      setMoveType(prevSelectedPiece, pieceX, pieceY);
+                      console.log("move-2b=checked");
+                      prevSelectedPiece.move(pieceX, pieceY);
+                    }
+                  }
+                } else {
+                  selectedPiece = null;
+                  prevSelectedPiece = null;
+                  selectedBox = null;
+                  prevSelectedBox = null;
+                  possibleMoves = [];
+                }
+              }
+            } else {
+              if (indexOfSquare !== -1 && protectingPieceIndex === -1) {
+                if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
+                  if (
+                    prevSelectedPiece.x !== pieceX ||
+                    prevSelectedPiece.y !== pieceY
+                  ) {
+                    moving = true;
+                    setMoveType(prevSelectedPiece, pieceX, pieceY);
+                    console.log("move-2a");
+                    setTimeout(() => {
+                      prevSelectedPiece.move(pieceX, pieceY);
+                    }, 1000);
+                  }
+                } else {
+                  if (
+                    prevSelectedPiece.x !== pieceX ||
+                    prevSelectedPiece.y !== pieceY
+                  ) {
+                    moving = true;
+                    setMoveType(prevSelectedPiece, pieceX, pieceY);
+                    console.log("move-2b");
+                    prevSelectedPiece.move(pieceX, pieceY);
+                  }
+                }
+              } else {
+                selectedPiece = null;
+                prevSelectedPiece = null;
+                selectedBox = null;
+                prevSelectedBox = null;
+                possibleMoves = [];
+
+                moving = false;
               }
             }
           }
         }
       } else {
-        
-        if (prevSelectedPiece && protectingPieceIndex === -1) {
-          function checkSquare(item) {
-            return item.x === selectedBox.x && item.y === selectedBox.y;
-          }
-          let indexOfSquare = prevSelectedPiece.legalMoves.findIndex(checkSquare);
-    
-          if(whiteKingChecked || blackKingChecked){
-    
-            if(whiteKingChecked && activeColor.startsWith("w") && allPossibleMovesWhiteWhenChecked.length > 0){
-             
-              let indexOfCheckingPiece =
-                allPossibleMovesWhiteWhenChecked.findIndex(checkSquare);
-                if (indexOfCheckingPiece !== -1 && indexOfSquare !== -1 && protectingPieceIndex === -1) {
-                  if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
-                    if (
-                      prevSelectedPiece.x !== pieceX ||
-                      prevSelectedPiece.y !== pieceY
-                    ) {
-                      
-              moving = true
-                      setMoveType(prevSelectedPiece, pieceX, pieceY);
-                      console.log("move-2a=checked");
-                      setTimeout(()=>{
-        
-                        prevSelectedPiece.move(pieceX, pieceY);
-                      },1000)
-                    }
-                  } else {
-                    if (
-                      prevSelectedPiece.x !== pieceX ||
-                      prevSelectedPiece.y !== pieceY
-                    ) {
-                      
-              moving = true
-                      setMoveType(prevSelectedPiece, pieceX, pieceY);
-                      console.log("move-2b=checked");
-                      prevSelectedPiece.move(pieceX, pieceY);
-                     
-                    }
-                  }
-                } else {
-                  selectedPiece = null;
-                  prevSelectedPiece = null;
-                  selectedBox = null;
-                  prevSelectedBox = null;
-                  possibleMoves = [];
-                }
-          
-            }
-            else if(blackKingChecked && activeColor.startsWith("b") && allPossibleMovesBlackWhenChecked.length > 0){
-             
-              let indexOfCheckingPiece =
-                allPossibleMovesBlackWhenChecked.findIndex(checkSquare);
-                if (indexOfCheckingPiece !== -1 && indexOfSquare !== -1 && protectingPieceIndex === -1) {
-                  if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
-                    if (
-                      prevSelectedPiece.x !== pieceX ||
-                      prevSelectedPiece.y !== pieceY
-                    ) {
-                      
-              moving = true
-                      setMoveType(prevSelectedPiece, pieceX, pieceY);
-                      console.log("move-2a=checked");
-                      setTimeout(()=>{
-        
-                        prevSelectedPiece.move(pieceX, pieceY);
-                      },1000)
-                    }
-                  } else {
-                    if (
-                      prevSelectedPiece.x !== pieceX ||
-                      prevSelectedPiece.y !== pieceY
-                    ) {
-                      
-              moving = true
-                      setMoveType(prevSelectedPiece, pieceX, pieceY);
-                      console.log("move-2b=checked");
-                      prevSelectedPiece.move(pieceX, pieceY);
-                     
-                    }
-                  }
-                } else {
-                  selectedPiece = null;
-                  prevSelectedPiece = null;
-                  selectedBox = null;
-                  prevSelectedBox = null;
-                  possibleMoves = [];
-                }
-            }
-          }
-          else{
-            if (indexOfSquare !== -1 && protectingPieceIndex === -1) {
-              if (isEnPassantValid(prevSelectedPiece, pieceX, pieceY)) {
-                if (
-                  prevSelectedPiece.x !== pieceX ||
-                  prevSelectedPiece.y !== pieceY
-                ) {
-                  
-              moving = true
-                  setMoveType(prevSelectedPiece, pieceX, pieceY);
-                  console.log("move-2a");
-                  setTimeout(()=>{
-    
-                    prevSelectedPiece.move(pieceX, pieceY);
-                  },1000)
-                }
-              } else {
-                if (
-                  prevSelectedPiece.x !== pieceX ||
-                  prevSelectedPiece.y !== pieceY
-                ) {
-                  
-              moving = true
-                  setMoveType(prevSelectedPiece, pieceX, pieceY);
-                  console.log("move-2b");
-                  prevSelectedPiece.move(pieceX, pieceY);
-                 
-                }
-              }
-            } else {
-              selectedPiece = null;
-              prevSelectedPiece = null;
-              selectedBox = null;
-              prevSelectedBox = null;
-              possibleMoves = [];
-              
-              moving =false
-            }
-          }        
-          
-        }
+        console.log("out");
+        selectedPiece = null;
+        prevSelectedPiece = null;
+        selectedBox = null;
+        prevSelectedBox = null;
+        possibleMoves = [];
       }
-    } else {
-      console.log("out");
-      selectedPiece = null;
-      prevSelectedPiece = null;
-      selectedBox = null;
-      prevSelectedBox = null;
-      possibleMoves = [];
     }
-      }
   }
-  
-  making_opp_move = false
-}
 
+  making_opp_move = false;
+}
 
 ///king stuff
 
 function getPossibleMovesOfPiece(piece) {
-  if ( whiteKingChecked || blackKingChecked) {
-    forbiddenBlackKingMoves=[]
-    forbiddenWhiteKingMoves=[]
+  if (whiteKingChecked || blackKingChecked) {
+    forbiddenBlackKingMoves = [];
+    forbiddenWhiteKingMoves = [];
     let name = piece.name.toLowerCase();
-    let color=piece.color
-    let moves
+    let color = piece.color;
+    let moves;
     switch (name) {
-      
       case "rook":
         moves = getRookMoves(piece);
-        moves.forEach(move => {
-          if(color ==="white"){
-
-            forbiddenBlackKingMoves.push(move)
+        moves.forEach((move) => {
+          if (color === "white") {
+            forbiddenBlackKingMoves.push(move);
           }
-          if(color ==="black")
-          
-          forbiddenWhiteKingMoves.push(move)
+          if (color === "black") forbiddenWhiteKingMoves.push(move);
         });
         break;
       case "bishop":
         moves = getBishopMoves(piece);
-        moves.forEach(move => {
-          if(color ==="white"){
-
-            forbiddenBlackKingMoves.push(move)
+        moves.forEach((move) => {
+          if (color === "white") {
+            forbiddenBlackKingMoves.push(move);
           }
-          if(color ==="black")
-          
-          forbiddenWhiteKingMoves.push(move)
+          if (color === "black") forbiddenWhiteKingMoves.push(move);
         });
         break;
       case "queen":
         moves = getQueenMoves(piece);
-        moves.forEach(move => {
-          if(color ==="white"){
-
-            forbiddenBlackKingMoves.push(move)
+        moves.forEach((move) => {
+          if (color === "white") {
+            forbiddenBlackKingMoves.push(move);
           }
-          if(color ==="black")
-          
-          forbiddenWhiteKingMoves.push(move)
+          if (color === "black") forbiddenWhiteKingMoves.push(move);
         });
         break;
       case "king":
         moves = getKingMoves(piece);
-        moves.forEach(move => {
-          if(color ==="white"){
-
-            forbiddenBlackKingMoves.push(move)
+        moves.forEach((move) => {
+          if (color === "white") {
+            forbiddenBlackKingMoves.push(move);
           }
-          if(color ==="black")
-          
-          forbiddenWhiteKingMoves.push(move)
+          if (color === "black") forbiddenWhiteKingMoves.push(move);
         });
         break;
     }
   }
 }
 
-function getPossibleNonOpenCheckMoves(piece,openCheckPiece) {
- allMovesForBlackOpenCheck=[]
- allMovesForWhiteOpenCheck=[]
+function getPossibleNonOpenCheckMoves(piece, openCheckPiece) {
+  allMovesForBlackOpenCheck = [];
+  allMovesForWhiteOpenCheck = [];
   let name = piece.name.toLowerCase();
-  let color=piece.color
-  let moves
-  
-  switch (name) {
-    
-    case "rook":
-      moves = getNonOpenCheckRookMoves(piece,openCheckPiece);
-     
-      moves.forEach(move => {
-        if(color ==="white"){
+  let color = piece.color;
+  let moves;
 
-          allMovesForBlackOpenCheck.push(move)
+  switch (name) {
+    case "rook":
+      moves = getNonOpenCheckRookMoves(piece, openCheckPiece);
+
+      moves.forEach((move) => {
+        if (color === "white") {
+          allMovesForBlackOpenCheck.push(move);
         }
-        if(color ==="black")
-        
-        allMovesForWhiteOpenCheck.push(move)
+        if (color === "black") allMovesForWhiteOpenCheck.push(move);
       });
       break;
     case "bishop":
-      moves = getNonOpenCheckBishopMoves(piece,openCheckPiece);
-      moves.forEach(move => {
-        if(color ==="white"){
-
-          allMovesForBlackOpenCheck.push(move)
+      moves = getNonOpenCheckBishopMoves(piece, openCheckPiece);
+      moves.forEach((move) => {
+        if (color === "white") {
+          allMovesForBlackOpenCheck.push(move);
         }
-        if(color ==="black")
-        
-        allMovesForWhiteOpenCheck.push(move)
+        if (color === "black") allMovesForWhiteOpenCheck.push(move);
       });
       break;
     case "queen":
-      moves = getNonOpenCheckQueenMoves(piece,openCheckPiece);
-      moves.forEach(move => {
-        if(color ==="white"){
-
-          allMovesForBlackOpenCheck.push(move)
+      moves = getNonOpenCheckQueenMoves(piece, openCheckPiece);
+      moves.forEach((move) => {
+        if (color === "white") {
+          allMovesForBlackOpenCheck.push(move);
         }
-        if(color ==="black")
-        
-        allMovesForWhiteOpenCheck.push(move)
+        if (color === "black") allMovesForWhiteOpenCheck.push(move);
       });
       break;
   }
-  
-  console.log("zzzzzzzzzzzzzzzzzzzzzzzzzz",allMovesForWhiteOpenCheck,allMovesForBlackOpenCheck)
+
+  console.log(
+    "zzzzzzzzzzzzzzzzzzzzzzzzzz",
+    allMovesForWhiteOpenCheck,
+    allMovesForBlackOpenCheck
+  );
 }
 
 ///moves stuff
@@ -6977,18 +6942,15 @@ function getRookMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
-    
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -6998,9 +6960,7 @@ function getRookMoves(piece) {
     }
     py -= size;
   }
-  
-  
-  
+
   //right
 
   px = piece.x + size;
@@ -7028,19 +6988,15 @@ function getRookMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
-            
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7050,9 +7006,7 @@ function getRookMoves(piece) {
     }
     px += size;
   }
-  
-  
-  
+
   //bottom
 
   px = piece.x;
@@ -7080,18 +7034,15 @@ function getRookMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
-            if (indexOfSquare === -1 && indexOfOwn === -1) {
+
+      if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7101,9 +7052,7 @@ function getRookMoves(piece) {
     }
     py += size;
   }
-  
-  
-  
+
   //left
 
   px = piece.x - size;
@@ -7131,19 +7080,15 @@ function getRookMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
-            
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7153,9 +7098,7 @@ function getRookMoves(piece) {
     }
     px -= size;
   }
-  
-  
-  
+
   return moves;
 }
 
@@ -7196,18 +7139,15 @@ function getBishopMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7219,9 +7159,7 @@ function getBishopMoves(piece) {
     px += size;
     py -= size;
   }
-  
-  
-  
+
   //right
 
   px = piece.x + size;
@@ -7249,18 +7187,15 @@ function getBishopMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7271,9 +7206,7 @@ function getBishopMoves(piece) {
     px += size;
     py += size;
   }
-  
-  
-  
+
   //bottom
 
   px = piece.x - size;
@@ -7301,18 +7234,15 @@ function getBishopMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7323,9 +7253,7 @@ function getBishopMoves(piece) {
     px -= size;
     py += size;
   }
-  
-  
-  
+
   //left
 
   px = piece.x - size;
@@ -7353,18 +7281,15 @@ function getBishopMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7375,9 +7300,7 @@ function getBishopMoves(piece) {
     px -= size;
     py -= size;
   }
-  
-  
-  
+
   return moves;
 }
 function getQueenMoves(piece) {
@@ -7415,18 +7338,15 @@ function getQueenMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7436,9 +7356,7 @@ function getQueenMoves(piece) {
     }
     py -= size;
   }
-  
-  
-  
+
   //right
 
   px = piece.x + size;
@@ -7466,18 +7384,15 @@ function getQueenMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7487,9 +7402,7 @@ function getQueenMoves(piece) {
     }
     px += size;
   }
-  
-  
-  
+
   //bottom
 
   px = piece.x;
@@ -7517,18 +7430,15 @@ function getQueenMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7538,9 +7448,7 @@ function getQueenMoves(piece) {
     }
     py += size;
   }
-  
-  
-  
+
   //left
 
   px = piece.x - size;
@@ -7568,18 +7476,15 @@ function getQueenMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7590,9 +7495,6 @@ function getQueenMoves(piece) {
     px -= size;
   }
 
-  
-  
-  
   //diagonal
   px = piece.x + size;
   py = piece.y - size;
@@ -7619,18 +7521,15 @@ function getQueenMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7642,9 +7541,7 @@ function getQueenMoves(piece) {
     px += size;
     py -= size;
   }
-  
-  
-  
+
   //right
 
   px = piece.x + size;
@@ -7672,18 +7569,15 @@ function getQueenMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7694,9 +7588,7 @@ function getQueenMoves(piece) {
     px += size;
     py += size;
   }
-  
-  
-  
+
   //bottom
 
   px = piece.x - size;
@@ -7724,18 +7616,15 @@ function getQueenMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7746,9 +7635,7 @@ function getQueenMoves(piece) {
     px -= size;
     py += size;
   }
-  
-  
-  
+
   //left
 
   px = piece.x - size;
@@ -7776,18 +7663,15 @@ function getQueenMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -7798,9 +7682,7 @@ function getQueenMoves(piece) {
     px -= size;
     py -= size;
   }
-  
-  
-  
+
   return moves;
 }
 
@@ -7839,22 +7721,17 @@ function getKingMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
-        
-        
         break;
       }
     } else {
@@ -7865,9 +7742,7 @@ function getKingMoves(piece) {
     }
     py -= size;
   }
-  
-  
-  
+
   //right
 
   checkedSquares = 1;
@@ -7896,22 +7771,17 @@ function getKingMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
-        
-        
         break;
       }
     } else {
@@ -7923,9 +7793,6 @@ function getKingMoves(piece) {
     px += size;
   }
 
-  
-  
-  
   //bottom
   checkedSquares = 1;
 
@@ -7954,22 +7821,17 @@ function getKingMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
-        
-        
         break;
       }
     } else {
@@ -7980,9 +7842,7 @@ function getKingMoves(piece) {
     }
     py += size;
   }
-  
-  
-  
+
   //left
 
   checkedSquares = 1;
@@ -8012,22 +7872,17 @@ function getKingMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
-        
-        
         break;
       }
     } else {
@@ -8039,9 +7894,6 @@ function getKingMoves(piece) {
     px -= size;
   }
 
-  
-  
-  
   //top-right
   checkedSquares = 1;
   px = piece.x + size;
@@ -8069,22 +7921,17 @@ function getKingMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
-        
-        
         break;
       }
     } else {
@@ -8098,9 +7945,6 @@ function getKingMoves(piece) {
     py -= size;
   }
 
-  
-  
-  
   //right-btm
 
   checkedSquares = 1;
@@ -8129,22 +7973,17 @@ function getKingMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
-        
-        
         break;
       }
     } else {
@@ -8157,9 +7996,6 @@ function getKingMoves(piece) {
     py += size;
   }
 
-  
-  
-  
   //bottom-left
   checkedSquares = 1;
 
@@ -8188,22 +8024,17 @@ function getKingMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
-        
-        
         break;
       }
     } else {
@@ -8216,9 +8047,6 @@ function getKingMoves(piece) {
     py += size;
   }
 
-  
-  
-  
   //left-top
   checkedSquares = 1;
 
@@ -8247,22 +8075,17 @@ function getKingMoves(piece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].name.toLowerCase() ==="king"){
-          
-        moves.push({ x: px, y: py });
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (pieces[indexOfSquare].name.toLowerCase() === "king") {
+          moves.push({ x: px, y: py });
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
-        
-        
         break;
       }
     } else {
@@ -8274,46 +8097,43 @@ function getKingMoves(piece) {
     px -= size;
     py -= size;
   }
-    if (castlingRights !== "-") {
-      if (color === "white") {
-        if (castlingRights.includes("Q")) {
-          moves.push({
-            x: squaresToCheckQueenSideWhite[2].x,
-            y: squaresToCheckQueenSideWhite[2].y,
-          });
-        }
-        if (castlingRights.includes("K")) {
-          moves.push({
-            x: squaresToCheckKingSideWhite[2].x,
-            y: squaresToCheckKingSideWhite[2].y,
-          });
-        }
+  if (castlingRights !== "-") {
+    if (color === "white") {
+      if (castlingRights.includes("Q")) {
+        moves.push({
+          x: squaresToCheckQueenSideWhite[2].x,
+          y: squaresToCheckQueenSideWhite[2].y,
+        });
       }
-      if (color === "black") {
-        if (castlingRights.includes("q")) {
-          moves.push({
-            x: squaresToCheckQueenSideBlack[2].x,
-            y: squaresToCheckQueenSideBlack[2].y,
-          });
-        }
-        if (castlingRights.includes("k")) {
-          moves.push({
-            x: squaresToCheckKingSideBlack[2].x,
-            y: squaresToCheckKingSideBlack[2].y,
-          });
-        }
+      if (castlingRights.includes("K")) {
+        moves.push({
+          x: squaresToCheckKingSideWhite[2].x,
+          y: squaresToCheckKingSideWhite[2].y,
+        });
       }
     }
-    
-    
-    
-    return moves;
-  
+    if (color === "black") {
+      if (castlingRights.includes("q")) {
+        moves.push({
+          x: squaresToCheckQueenSideBlack[2].x,
+          y: squaresToCheckQueenSideBlack[2].y,
+        });
+      }
+      if (castlingRights.includes("k")) {
+        moves.push({
+          x: squaresToCheckKingSideBlack[2].x,
+          y: squaresToCheckKingSideBlack[2].y,
+        });
+      }
+    }
+  }
+
+  return moves;
 }
 
 ///legal open check moves
 
-function getNonOpenCheckRookMoves(piece,openCheckPiece) {
+function getNonOpenCheckRookMoves(piece, openCheckPiece) {
   let moves = [];
   let px = piece.x;
   let py = piece.y;
@@ -8322,8 +8142,8 @@ function getNonOpenCheckRookMoves(piece,openCheckPiece) {
   let color = piece.color;
   //top
   let size = piece.size;
-  let foundOpenChechPiece=false
-  
+  let foundOpenChechPiece = false;
+
   moves.push({ x: piece.x, y: piece.y });
 
   py = piece.y - size;
@@ -8349,19 +8169,19 @@ function getNonOpenCheckRookMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
-    
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8371,11 +8191,10 @@ function getNonOpenCheckRookMoves(piece,openCheckPiece) {
     }
     py -= size;
   }
-  
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
   //right
@@ -8405,20 +8224,19 @@ function getNonOpenCheckRookMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
-            
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8428,11 +8246,10 @@ function getNonOpenCheckRookMoves(piece,openCheckPiece) {
     }
     px += size;
   }
-  
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
   //bottom
@@ -8462,19 +8279,19 @@ function getNonOpenCheckRookMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
-            if (indexOfSquare === -1 && indexOfOwn === -1) {
+
+      if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8484,13 +8301,13 @@ function getNonOpenCheckRookMoves(piece,openCheckPiece) {
     }
     py += size;
   }
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
-  
+
   //left
 
   px = piece.x - size;
@@ -8518,20 +8335,19 @@ function getNonOpenCheckRookMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
-            
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8541,13 +8357,11 @@ function getNonOpenCheckRookMoves(piece,openCheckPiece) {
     }
     px -= size;
   }
-  
-  
-  
+
   return moves;
 }
 
-function getNonOpenCheckBishopMoves(piece,openCheckPiece) {
+function getNonOpenCheckBishopMoves(piece, openCheckPiece) {
   let moves = [];
   let px = piece.x;
   let py = piece.y;
@@ -8556,7 +8370,7 @@ function getNonOpenCheckBishopMoves(piece,openCheckPiece) {
   let color = piece.color;
   //top
   let size = piece.size;
-  let foundOpenChechPiece=false
+  let foundOpenChechPiece = false;
 
   moves.push({ x: piece.x, y: piece.y });
 
@@ -8585,19 +8399,19 @@ function getNonOpenCheckBishopMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8609,11 +8423,10 @@ function getNonOpenCheckBishopMoves(piece,openCheckPiece) {
     px += size;
     py -= size;
   }
-  
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
   //right
@@ -8643,19 +8456,19 @@ function getNonOpenCheckBishopMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8666,13 +8479,13 @@ function getNonOpenCheckBishopMoves(piece,openCheckPiece) {
     px += size;
     py += size;
   }
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
-  
+
   //bottom
 
   px = piece.x - size;
@@ -8700,19 +8513,19 @@ function getNonOpenCheckBishopMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8723,11 +8536,10 @@ function getNonOpenCheckBishopMoves(piece,openCheckPiece) {
     px -= size;
     py += size;
   }
-  
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
   //left
@@ -8757,19 +8569,19 @@ function getNonOpenCheckBishopMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8780,12 +8592,10 @@ function getNonOpenCheckBishopMoves(piece,openCheckPiece) {
     px -= size;
     py -= size;
   }
-  
-  
-  
+
   return moves;
 }
-function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
+function getNonOpenCheckQueenMoves(piece, openCheckPiece) {
   let moves = [];
   let px = piece.x;
   let py = piece.y;
@@ -8794,7 +8604,7 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
   let color = piece.color;
   //top
   let size = piece.size;
-  let foundOpenChechPiece=false
+  let foundOpenChechPiece = false;
 
   moves.push({ x: piece.x, y: piece.y });
 
@@ -8821,19 +8631,19 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8843,13 +8653,13 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
     }
     py -= size;
   }
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
-  
+
   //right
 
   px = piece.x + size;
@@ -8877,19 +8687,19 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8899,13 +8709,13 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
     }
     px += size;
   }
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
-  
+
   //bottom
 
   px = piece.x;
@@ -8933,19 +8743,19 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -8955,11 +8765,10 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
     }
     py += size;
   }
-  
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
   //left
@@ -8989,19 +8798,19 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -9012,13 +8821,12 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
     px -= size;
   }
 
-  
-  if(foundOpenChechPiece){
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
-  
+
   //diagonal
   px = piece.x + size;
   py = piece.y - size;
@@ -9045,19 +8853,19 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -9069,11 +8877,10 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
     px += size;
     py -= size;
   }
-  
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
   //right
@@ -9103,19 +8910,19 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -9126,13 +8933,13 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
     px += size;
     py += size;
   }
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
-  
+
   //bottom
 
   px = piece.x - size;
@@ -9160,19 +8967,19 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -9183,13 +8990,13 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
     px -= size;
     py += size;
   }
-  
-  if(foundOpenChechPiece){
+
+  if (foundOpenChechPiece) {
     return moves;
-  }else{
+  } else {
     moves = [{ x: piece.x, y: piece.y }];
   }
-  
+
   //left
 
   px = piece.x - size;
@@ -9217,19 +9024,19 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
       }
 
       indexOfOwn = pieces.findIndex(checkForOwnPiece);
-      
+
       if (indexOfSquare === -1 && indexOfOwn === -1) {
         moves.push({ x: px, y: py });
       } else if (indexOfSquare !== -1) {
-        if(pieces[indexOfSquare].x === openCheckPiece.x && pieces[indexOfSquare].y === openCheckPiece.y){
-          
-        moves.push({ x: px, y: py });
-        foundOpenChechPiece=true
-        }
-        else{
-            
-        moves.push({ x: px, y: py });
-        break;
+        if (
+          pieces[indexOfSquare].x === openCheckPiece.x &&
+          pieces[indexOfSquare].y === openCheckPiece.y
+        ) {
+          moves.push({ x: px, y: py });
+          foundOpenChechPiece = true;
+        } else {
+          moves.push({ x: px, y: py });
+          break;
         }
       } else {
         break;
@@ -9240,9 +9047,6 @@ function getNonOpenCheckQueenMoves(piece,openCheckPiece) {
     px -= size;
     py -= size;
   }
-  
-  
-  
+
   return moves;
 }
-
